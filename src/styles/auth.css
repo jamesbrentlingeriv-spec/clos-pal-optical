@@ -1,0 +1,316 @@
+/* ==========================================================================
+   C.L.O.S. AUTHENTICATION & LOGIN WINDOW STYLES
+   ========================================================================== */
+
+#clos-auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 30%, #0f172a 0%, #090d16 60%, #020617 100%);
+  padding: 20px;
+  overflow-y: auto;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+#clos-auth-overlay.auth-hidden {
+  opacity: 0;
+  transform: scale(0.96);
+  pointer-events: none;
+}
+
+/* Ambient optical background element */
+.auth-ambient-orb {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(2, 132, 199, 0.05) 50%, transparent 75%);
+  filter: blur(60px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Login Card */
+.clos-login-card {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7),
+              0 0 30px rgba(14, 165, 233, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  padding: 34px 32px;
+  color: #ffffff;
+  animation: authCardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Header & Emblem */
+.clos-auth-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.clos-auth-emblem {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.45), 0 10px 20px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(56, 189, 248, 0.5);
+  margin-bottom: 16px;
+  background: #080f24;
+}
+
+.clos-login-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.clos-auth-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin: 0;
+  color: #ffffff;
+}
+
+.clos-auth-title span {
+  color: #38bdf8;
+}
+
+.clos-auth-subtitle {
+  font-size: 0.86rem;
+  color: #94a3b8;
+  margin: 6px 0 0 0;
+  font-weight: 400;
+}
+
+/* Quick Role Preset Selector */
+.clos-role-preset-wrap {
+  margin-bottom: 20px;
+}
+
+.clos-role-preset-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.clos-role-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.clos-role-btn {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+  padding: 8px 6px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.clos-role-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #ffffff;
+}
+
+.clos-role-btn.active {
+  background: rgba(14, 165, 233, 0.25);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+.clos-role-btn span.role-icon {
+  font-size: 1.05rem;
+}
+
+/* Form Fields */
+.clos-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.clos-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.clos-input-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.clos-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.clos-input-icon {
+  position: absolute;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  color: #64748b;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.clos-auth-input {
+  width: 100%;
+  background: rgba(2, 6, 23, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 12px;
+  padding: 12px 14px 12px 42px;
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.clos-auth-input:focus {
+  border-color: #38bdf8;
+  background: rgba(2, 6, 23, 0.9);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.clos-input-wrap:focus-within .clos-input-icon {
+  color: #38bdf8;
+}
+
+.clos-toggle-password {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clos-toggle-password:hover {
+  color: #ffffff;
+}
+
+/* Remember me & footer options */
+.clos-auth-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  margin-top: 2px;
+}
+
+.clos-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  cursor: pointer;
+  user-select: none;
+}
+
+.clos-checkbox-label input[type="checkbox"] {
+  accent-color: #0284c7;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.clos-staff-hint {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Submit Button */
+.clos-auth-submit-btn {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 13px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+  margin-top: 6px;
+}
+
+.clos-auth-submit-btn:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+  transform: translateY(-1px);
+}
+
+.clos-auth-submit-btn:active {
+  transform: translateY(1px);
+}
+
+/* Error message banner */
+.clos-auth-error {
+  min-height: 20px;
+  font-size: 0.82rem;
+  color: #f87171;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.clos-auth-error.has-error {
+  animation: closAuthShake 0.4s ease;
+}
+
+/* Keyframes */
+@keyframes authCardEnter {
+  0% { opacity: 0; transform: translateY(20px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes closAuthShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}

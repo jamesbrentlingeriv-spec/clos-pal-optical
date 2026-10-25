@@ -1,0 +1,4712 @@
+/* Pal Optical Forms Web App - Print Specific Stylesheet */
+
+
+
+@media print {
+
+  /* Hide all interactive UI panels */
+
+  aside.sidebar,
+
+  header.actions-header,
+
+  .mobile-menu-btn,
+
+  .mobile-print-fab,
+
+  .signature-controls,
+
+  .signature-placeholder,
+
+  .btn,
+
+  .theme-toggle-btn,
+
+  .toggle-group,
+
+  .print-tip-banner,
+
+  .print\:hidden {
+
+    display: none !important;
+
+  }
+
+  
+
+  /* Reset container sizes to fill the printable area */
+
+  html, body, .app-container, .main-panel, .form-viewport {
+
+    background-color: #fff !important;
+
+    color: #000 !important;
+
+    height: 100% !important;
+
+    width: 100% !important;
+
+    overflow: visible !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    display: block !important;
+
+  }
+
+  
+
+  /* Adjust form card for standard Letter Page size */
+
+  .form-card {
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    margin: 0 !important;
+
+    padding: 0.25in !important; /* Professional print margins */
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    min-height: auto !important;
+
+    background-color: #fff !important;
+
+    color: #000 !important;
+
+    page-break-after: always;
+
+  }
+
+  
+
+  /* Ensure page breaks don't chop sections */
+
+  .form-section {
+
+    page-break-inside: avoid;
+
+  }
+
+  
+
+  /* Strip inputs down to simple flat lines or printable blocks */
+
+  .form-control {
+
+    border: none !important;
+
+    border-bottom: 1px solid #000 !important;
+
+    border-radius: 0 !important;
+
+    background: transparent !important;
+
+    color: #000 !important;
+
+    padding: 2px 4px !important;
+
+    box-shadow: none !important;
+
+    height: 24px !important;
+
+    font-size: 0.95rem !important;
+
+  }
+
+  
+
+  textarea.form-control {
+
+    border: 1px solid #000 !important;
+
+    height: 60px !important;
+
+  }
+
+  
+
+  /* Adjust print representation of checkboxes & radio inputs */
+
+  input[type="checkbox"], input[type="radio"] {
+
+    border: 1px solid #000 !important;
+
+    background-color: #fff !important;
+
+    color: #000 !important;
+
+    print-color-adjust: exact;
+
+    -webkit-print-color-adjust: exact;
+
+  }
+
+  
+
+  /* Force table formatting to be high contrast for printers */
+
+  .prescription-table th {
+
+    background-color: #f1f5f9 !important;
+
+    color: #000 !important;
+
+    border: 1px solid #000 !important;
+
+    print-color-adjust: exact;
+
+    -webkit-print-color-adjust: exact;
+
+  }
+
+  
+
+  .prescription-table td {
+
+    border: 1px solid #000 !important;
+
+    color: #000 !important;
+
+  }
+
+  
+
+  .eye-row-header {
+
+    background-color: #f8fafc !important;
+
+    border: 1px solid #000 !important;
+
+  }
+
+  
+
+  /* Clear signature line styling */
+
+  .signature-canvas-wrapper {
+
+    border: none !important;
+
+    border-bottom: 1px solid #000 !important;
+
+    border-radius: 0 !important;
+
+    background: transparent !important;
+
+    height: 100px !important;
+
+  }
+
+  
+
+  .signature-canvas-wrapper canvas {
+
+    border: none !important;
+
+  }
+
+  
+
+  .total-summary-card {
+
+    background-color: transparent !important;
+
+    border: 1px solid #000 !important;
+
+    print-color-adjust: exact;
+
+    -webkit-print-color-adjust: exact;
+
+  }
+
+  
+
+  /* Adjust header styles to save ink and look professional */
+
+  .form-header-block {
+
+    border-bottom: 2px solid #000 !important;
+
+  }
+
+  
+
+  .form-section-title {
+
+    color: #000 !important;
+
+    border-bottom: 1px solid #000 !important;
+
+  }
+
+  
+
+  /* Print Blank Mode Overrides */
+
+  .print-blank-active .form-control,
+
+  .print-blank-active .cms-input,
+
+  .print-blank-active .form-input-line,
+
+  .print-blank-active input,
+
+  .print-blank-active textarea {
+
+    color: transparent !important;
+
+    -webkit-text-fill-color: transparent !important; /* Safari support */
+
+  }
+
+
+
+  .print-blank-active input::placeholder,
+
+  .print-blank-active textarea::placeholder,
+
+  .print-blank-active .form-control::placeholder {
+
+    color: transparent !important;
+
+    -webkit-text-fill-color: transparent !important;
+
+  }
+
+  
+
+  .print-blank-active input[type="checkbox"],
+
+  .print-blank-active input[type="radio"],
+
+  .print-blank-active .checkbox-custom,
+
+  .print-blank-active .radio-custom {
+
+    background-color: transparent !important;
+
+    background-image: none !important;
+
+    color: transparent !important;
+
+  }
+
+  
+
+  .print-blank-active .checkbox-custom:checked,
+
+  .print-blank-active .radio-custom:checked,
+
+  .print-blank-active input[type="checkbox"]:checked,
+
+  .print-blank-active input[type="radio"]:checked {
+
+    background-color: transparent !important;
+
+    background-image: none !important;
+
+    color: transparent !important;
+
+    accent-color: transparent !important;
+
+  }
+
+
+
+  /* Scoped print styles for CMS-1500: Print ONLY the typed text overlaid on cms1500print.png background */
+
+  body.active-form-cms1500 .form-viewport {
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    background: #fff !important;
+
+    height: 100% !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    display: block !important;
+
+  }
+
+  
+
+  body.active-form-cms1500 .cms1500-interactive-container {
+
+    width: 8.5in !important;
+
+    height: 11in !important;
+
+    max-width: 8.5in !important;
+
+    max-height: 11in !important;
+
+    position: absolute !important;
+
+    top: 0 !important;
+
+    left: 0 !important;
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+
+    background: #fff !important;
+
+  }
+
+  
+
+  body.active-form-cms1500 canvas {
+
+    display: none !important; /* Hide the background red PDF canvas */
+
+  }
+
+  
+
+  body.active-form-cms1500 .cms1500-text-input,
+
+  body.active-form-cms1500 .cms1500-checkbox {
+
+    position: absolute !important;
+
+    left: var(--print-left) !important;
+
+    top: var(--print-top) !important;
+
+    width: var(--print-width) !important;
+
+    height: var(--print-height) !important;
+
+    font-size: var(--print-font-size) !important;
+
+    border: none !important;
+
+    background: transparent !important;
+
+    box-shadow: none !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    color: #000 !important;
+
+    box-sizing: border-box !important;
+
+    font-family: Courier, monospace !important;
+
+    font-weight: bold !important;
+
+    text-transform: uppercase !important;
+
+  }
+
+  
+
+  body.active-form-cms1500 .cms1500-checkbox {
+
+    appearance: none !important;
+
+    -webkit-appearance: none !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+  }
+
+  
+
+  body.active-form-cms1500 .cms1500-checkbox:checked::before {
+
+    content: 'X' !important;
+
+    font-family: Arial, sans-serif !important;
+
+    font-weight: 900 !important;
+
+    color: #000 !important;
+
+    font-size: calc(var(--print-font-size) * 1.1) !important;
+
+    line-height: 1.0 !important;
+
+  }
+
+
+
+  /* Scoped print styles for Eagle Safety Eyewear: Print text values on top of the rendered PDF canvas */
+
+  body.active-form-safety-order .form-viewport {
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    background: #fff !important;
+
+    height: auto !important;
+
+    width: 100% !important;
+
+    overflow: visible !important;
+
+    display: block !important;
+
+  }
+
+  
+
+  body.active-form-safety-order .safety-interactive-container {
+
+    width: 8.5in !important;
+
+    height: 11in !important;
+
+    max-width: 8.5in !important;
+
+    max-height: 11in !important;
+
+    position: relative !important;
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    margin: 0 auto !important;
+
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+
+    background: #fff !important;
+
+  }
+
+  
+
+  body.active-form-safety-order canvas {
+
+    display: block !important; /* Keep the canvas template visible! */
+
+    width: 100% !important;
+
+    height: auto !important;
+
+  }
+
+  
+
+  body.active-form-safety-order .safety-text-input,
+
+  body.active-form-safety-order .safety-checkbox {
+
+    position: absolute !important;
+
+    left: var(--print-left) !important;
+
+    top: var(--print-top) !important;
+
+    width: var(--print-width) !important;
+
+    height: var(--print-height) !important;
+
+    font-size: var(--print-font-size) !important;
+
+    border: none !important;
+
+    background: transparent !important;
+
+    box-shadow: none !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    color: #000 !important;
+
+    box-sizing: border-box !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-weight: bold !important;
+
+    text-transform: uppercase !important;
+
+  }
+
+  
+
+  body.active-form-safety-order .safety-checkbox {
+
+    appearance: none !important;
+
+    -webkit-appearance: none !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+  }
+
+  
+
+  body.active-form-safety-order .safety-checkbox:checked::before {
+
+    content: 'X' !important;
+
+    font-family: Arial, sans-serif !important;
+
+    font-weight: 900 !important;
+
+    color: #000 !important;
+
+    font-size: calc(var(--print-font-size) * 1.1) !important;
+
+    line-height: 1.0 !important;
+
+  }
+
+
+
+  /* Scoped print styles for Optical Write-Up Form: 5.5" x 8.5" Statement */
+
+  body.active-form-writeup {
+
+    page: writeup-statement;
+
+  }
+
+
+
+  body.active-form-writeup .form-viewport {
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    background: #fff !important;
+
+    height: 100% !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+
+    display: block !important;
+
+  }
+
+
+
+  body.active-form-writeup .writeup-toolbar,
+
+  body.active-form-writeup .no-print {
+
+    display: none !important;
+
+  }
+
+
+
+  body.active-form-writeup .writeup-card-container {
+
+    width: 5.5in !important;
+
+    height: 8.5in !important;
+
+    max-width: 5.5in !important;
+
+    max-height: 8.5in !important;
+
+    position: absolute !important;
+
+    top: 0 !important;
+
+    left: 0 !important;
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+
+    background: #fff !important;
+
+  }
+
+
+
+  body.active-form-writeup .writeup-inner-page {
+
+    width: 5.5in !important;
+
+    height: 8.5in !important;
+
+    box-shadow: none !important;
+
+    border: none !important;
+
+    position: absolute !important;
+
+    top: 0 !important;
+
+    left: 0 !important;
+
+  }
+
+
+
+  /* Pre-printed mode: hide background image so only text prints on the physical form */
+
+  body.active-form-writeup .print-preprinted .writeup-bg-img {
+
+    display: none !important;
+
+  }
+
+
+
+  /* Full form mode: keep background image */
+
+  body.active-form-writeup .print-full .writeup-bg-img {
+
+    display: block !important;
+
+    print-color-adjust: exact !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-writeup .writeup-text-input,
+
+  body.active-form-writeup .writeup-checkbox {
+
+    position: absolute !important;
+
+    left: var(--print-left) !important;
+
+    top: var(--print-top) !important;
+
+    width: var(--print-width) !important;
+
+    height: var(--print-height) !important;
+
+    border: none !important;
+
+    background: transparent !important;
+
+    box-shadow: none !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    color: #000 !important;
+
+    box-sizing: border-box !important;
+
+    font-family: Arial, sans-serif !important;
+
+    font-size: 10pt !important;
+
+    line-height: 1.2 !important;
+
+  }
+
+
+
+  body.active-form-writeup .writeup-text-input.font-bold {
+
+    font-weight: bold !important;
+
+  }
+
+
+
+  body.active-form-writeup input[name="order_number"] {
+
+    font-size: 12pt !important;
+
+    font-weight: bold !important;
+
+  }
+
+
+
+  body.active-form-writeup .writeup-checkbox {
+
+    appearance: none !important;
+
+    -webkit-appearance: none !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+  }
+
+
+
+  body.active-form-writeup .writeup-checkbox:checked::before {
+
+    content: 'X' !important;
+
+    font-family: Arial, sans-serif !important;
+
+    font-weight: 900 !important;
+
+    color: #000 !important;
+
+    font-size: 12pt !important;
+
+    line-height: 1.0 !important;
+
+  }
+
+}
+
+
+
+@page writeup-statement {
+
+  size: 5.5in 8.5in;
+
+  margin: 0;
+
+}
+
+
+
+@page {
+
+  size: letter;
+
+  margin: 0 !important; /* Globally set page margin to 0 to enable absolute letter canvas printing */
+
+}
+
+
+
+@media print {
+
+  /* Scoped print overrides for active-form-fee-slip: condensed to 1 single page with inputted part anchored at the bottom */
+  @page fee-slip-page {
+    size: letter portrait;
+    margin: 0.2in 0.25in !important;
+  }
+
+  body.active-form-fee-slip {
+    page: fee-slip-page !important;
+  }
+
+  body.active-form-fee-slip,
+  body.active-form-fee-slip .app-container,
+  body.active-form-fee-slip .main-panel,
+  body.active-form-fee-slip .form-viewport,
+  body.active-form-fee-slip #form-render-target {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: hidden !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container #fee-slip-form {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .flex-1.grid.grid-cols-12 {
+    flex: 1 1 auto !important;
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap-x: 6px !important;
+    height: 100% !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .col-span-4 {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    justify-content: space-between !important;
+    overflow: hidden !important;
+    gap: 0px !important;
+  }
+
+  /* Header in print */
+  body.active-form-fee-slip .fee-slip-container .header-input input {
+    font-size: 20pt !important;
+    font-weight: 900 !important;
+    height: 26px !important;
+    min-height: 26px !important;
+    line-height: 1.0 !important;
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .header-input span {
+    font-size: 9.5pt !important;
+    font-weight: 900 !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .mb-4 {
+    margin-bottom: 2px !important;
+  }
+
+  /* Ultra-compact diagnosis and procedure lines to condense to 1 page */
+  body.active-form-fee-slip .fee-slip-container .flex.items-start.gap-1.py-0,
+  body.active-form-fee-slip .fee-slip-container .flex.items-center.justify-between.gap-1.py-0 {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    margin: 0 !important;
+    line-height: 0.95 !important;
+    height: 9.8px !important;
+    min-height: 9.8px !important;
+    gap: 1.5px !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .label-text {
+    font-size: 6.2pt !important;
+    line-height: 0.95 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .code-text {
+    font-size: 5pt !important;
+    line-height: 0.95 !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .section-title {
+    font-size: 6.8pt !important;
+    padding: 0px 1px !important;
+    margin-top: 1px !important;
+    margin-bottom: 1px !important;
+    border-bottom: 1px solid #000 !important;
+    line-height: 1.05 !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .checkbox-custom,
+  body.active-form-fee-slip .fee-slip-container .radio-custom {
+    height: 7px !important;
+    width: 7px !important;
+    min-height: 7px !important;
+    min-width: 7px !important;
+    margin: 0 1px 0 0 !important;
+    transform: none !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .scale-75 {
+    transform: none !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .gap-1 {
+    gap: 1px !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .py-0 {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+
+  /* General input overrides */
+  body.active-form-fee-slip .fee-slip-container input:not([type=checkbox]):not([type=radio]) {
+    font-size: 20pt !important;
+    font-weight: 900 !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    line-height: 1.0 !important;
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+  }
+
+  /* Procedure value input in columns */
+  body.active-form-fee-slip .fee-slip-container .proc-val {
+    font-size: 20pt !important;
+    font-weight: 900 !important;
+    height: 18px !important;
+    min-height: 18px !important;
+    width: 55px !important;
+    border-bottom: 1px solid #000000 !important;
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    line-height: 1.0 !important;
+    padding: 0 2px !important;
+  }
+
+  /* Column 3 Contact Materials inputs */
+  body.active-form-fee-slip .fee-slip-container #fs-cl-rt,
+  body.active-form-fee-slip .fee-slip-container #fs-cl-lt,
+  body.active-form-fee-slip .fee-slip-container #fs-cl-s1,
+  body.active-form-fee-slip .fee-slip-container #fs-cl-s2 {
+    font-size: 20pt !important;
+    font-weight: 900 !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    line-height: 1.0 !important;
+    text-align: center !important;
+  }
+
+  /* INPUTTED PART AT THE BOTTOM: Ledger Summary Box anchored firmly at bottom of Column 3 */
+  body.active-form-fee-slip .fee-slip-container .summary-input {
+    margin-top: auto !important;
+    padding-top: 2px !important;
+    padding-bottom: 1px !important;
+    border-top: 2.5px solid #000000 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5px !important;
+    visibility: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .summary-input > div {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: space-between !important;
+    gap: 3px !important;
+    min-height: 21px !important;
+    height: 21px !important;
+    visibility: visible !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .summary-input span {
+    font-size: 8pt !important;
+    font-weight: 900 !important;
+    line-height: 1.0 !important;
+    color: #000000 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+    visibility: visible !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .summary-input input {
+    font-size: 20pt !important;
+    font-weight: 900 !important;
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+    text-align: left !important;
+    height: 21px !important;
+    min-height: 21px !important;
+    line-height: 1.0 !important;
+    border: none !important;
+    border-bottom: 1.5px solid #000000 !important;
+    padding: 0 3px !important;
+    background: transparent !important;
+    visibility: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .summary-input .border-b {
+    border-bottom: 1.5px solid #000000 !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    height: 21px !important;
+    visibility: visible !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .summary-input span.text-sm {
+    font-size: 12pt !important;
+    font-weight: 900 !important;
+    line-height: 1.0 !important;
+    color: #000000 !important;
+    visibility: visible !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .summary-input .mt-2 {
+    margin-top: 1px !important;
+  }
+
+  /* Column 1 Practice Address anchored at bottom */
+  body.active-form-fee-slip .fee-slip-container div[class*="mt-auto pt-4 border-t-2"] {
+    margin-top: auto !important;
+    padding-top: 2px !important;
+    border-top: 2px solid #000000 !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container div[class*="mt-auto pt-4 border-t-2"] div {
+    font-size: 6.8pt !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Column 2 baseline spacer anchored at bottom */
+  body.active-form-fee-slip .fee-slip-container div[class*="min-h-[50px]"] {
+    margin-top: auto !important;
+    padding-top: 2px !important;
+    border-top: 2px solid #000000 !important;
+    min-height: 20px !important;
+    height: 20px !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .mt-2 {
+    margin-top: 1px !important;
+  }
+
+  body.active-form-fee-slip .fee-slip-container .mt-auto {
+    margin-top: auto !important;
+  }
+
+  /* Scoped print overrides for new waivers to ensure single-page fits */
+
+  body.active-form-child-no-poly .form-card,
+
+  body.active-form-expired-rx .form-card,
+
+  body.active-form-frame-no-child .form-card,
+
+  body.active-form-patients-own-frame .form-card,
+
+  body.active-form-semi-rimless .form-card,
+
+  body.active-form-single-vision .form-card,
+
+  body.active-form-bilingual-lens .form-card {
+
+    padding: 0.25in !important;
+
+    margin: 0 !important;
+
+    height: auto !important;
+
+    min-height: auto !important;
+
+    page-break-after: avoid !important;
+
+    break-after: avoid !important;
+
+  }
+
+  
+
+  body.active-form-child-no-poly .form-section,
+
+  body.active-form-expired-rx .form-section,
+
+  body.active-form-frame-no-child .form-section,
+
+  body.active-form-patients-own-frame .form-section,
+
+  body.active-form-semi-rimless .form-section,
+
+  body.active-form-single-vision .form-section,
+
+  body.active-form-bilingual-lens .form-section {
+
+    margin-bottom: 8px !important;
+
+  }
+
+  
+
+  body.active-form-child-no-poly p,
+
+  body.active-form-expired-rx p,
+
+  body.active-form-frame-no-child p,
+
+  body.active-form-patients-own-frame p,
+
+  body.active-form-semi-rimless p,
+
+  body.active-form-single-vision p,
+
+  body.active-form-bilingual-lens p {
+
+    font-size: 8pt !important;
+
+    line-height: 1.3 !important;
+
+    margin-bottom: 4px !important;
+
+  }
+
+  
+
+  body.active-form-child-no-poly label,
+
+  body.active-form-expired-rx label,
+
+  body.active-form-frame-no-child label,
+
+  body.active-form-patients-own-frame label,
+
+  body.active-form-semi-rimless label,
+
+  body.active-form-single-vision label,
+
+  body.active-form-bilingual-lens label {
+
+    font-size: 7.5pt !important;
+
+  }
+
+
+
+  body.active-form-bilingual-lens .signature-canvas-wrapper {
+
+    height: 60px !important;
+
+  }
+
+
+
+  /* Scoped print overrides for DrSideNewPatient form — calibrated for exactly 2 pages (front & back) */
+
+  body.active-form-dr-side-patient .form-card {
+
+    padding: 0.25in 0.35in !important;
+
+    margin: 0 !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    min-height: auto !important;
+
+    page-break-after: auto !important;
+
+    box-sizing: border-box !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .form-header-block {
+
+    margin-bottom: 8px !important;
+
+    padding-bottom: 4px !important;
+
+    border-bottom: 2px solid #000 !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .form-header-block h2 {
+
+    font-size: 13pt !important;
+
+    font-weight: 800 !important;
+
+    margin-bottom: 2px !important;
+
+    line-height: 1.15 !important;
+
+    text-transform: uppercase !important;
+
+    letter-spacing: 0.5px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .form-header-block p {
+
+    font-size: 7.5pt !important;
+
+    margin: 0 !important;
+
+    line-height: 1.2 !important;
+
+    color: #333 !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .top-dates-grid {
+
+    margin-bottom: 8px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .form-section {
+
+    margin-bottom: 8px !important;
+
+    padding-bottom: 0px !important;
+
+    page-break-inside: avoid !important;
+
+    break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .form-section-title {
+
+    font-size: 8.8pt !important;
+
+    font-weight: 700 !important;
+
+    margin-bottom: 6px !important;
+
+    padding-bottom: 2px !important;
+
+    border-bottom: 1.2px solid #000 !important;
+
+    text-transform: uppercase !important;
+
+    letter-spacing: 0.4px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 6px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .form-section-title svg {
+
+    display: inline-block !important;
+
+    width: 12px !important;
+
+    height: 12px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .form-grid {
+
+    gap: 5px 10px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .form-group {
+
+    margin-bottom: 2px !important;
+
+    padding: 0 !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient label {
+
+    font-size: 7pt !important;
+
+    font-weight: 600 !important;
+
+    margin-bottom: 1px !important;
+
+    line-height: 1.1 !important;
+
+    color: #111 !important;
+
+    text-transform: uppercase !important;
+
+    letter-spacing: 0.2px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .form-control {
+
+    height: 18px !important;
+
+    font-size: 8.5pt !important;
+
+    padding: 0px 4px !important;
+
+    line-height: 18px !important;
+
+    border: none !important;
+
+    border-bottom: 1px solid #333 !important;
+
+    border-radius: 0 !important;
+
+    background: transparent !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient textarea.form-control {
+
+    height: 32px !important;
+
+    font-size: 7.8pt !important;
+
+    line-height: 1.2 !important;
+
+    border: 1px solid #444 !important;
+
+    border-radius: 3px !important;
+
+    padding: 3px 5px !important;
+
+    resize: none !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient p,
+
+  body.active-form-dr-side-patient .dilation-text {
+
+    font-size: 7.2pt !important;
+
+    line-height: 1.2 !important;
+
+    margin-bottom: 3px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient strong {
+
+    font-size: inherit !important;
+
+    font-weight: 700 !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .checkbox-grid {
+
+    gap: 3px 6px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .checkbox-label,
+
+  body.active-form-dr-side-patient .radio-label {
+
+    font-size: 7.2pt !important;
+
+    font-weight: 500 !important;
+
+    gap: 4px !important;
+
+    cursor: default !important;
+
+    text-transform: none !important;
+
+    letter-spacing: normal !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient input[type="checkbox"],
+
+  body.active-form-dr-side-patient input[type="radio"] {
+
+    width: 10px !important;
+
+    height: 10px !important;
+
+    margin: 0 !important;
+
+    accent-color: #000 !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .gender-radio-group {
+
+    margin-top: 4px !important;
+
+    gap: 12px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .social-health-group {
+
+    gap: 6px 14px !important;
+
+    margin-top: 2px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .illegal-drugs-group {
+
+    padding-bottom: 4px !important;
+
+    margin-bottom: 4px !important;
+
+    border-bottom: 1px solid #ddd !important;
+
+    font-size: 7.2pt !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient #ds-drugs-list {
+
+    width: 220px !important;
+
+    height: 16px !important;
+
+    margin-left: 4px !important;
+
+    padding: 0 4px !important;
+
+    display: inline-block !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .diabetes-row,
+
+  body.active-form-dr-side-patient .allergy-row {
+
+    padding-top: 4px !important;
+
+    margin-top: 4px !important;
+
+    font-size: 7.2pt !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient #ds-a1c {
+
+    width: 60px !important;
+
+    height: 16px !important;
+
+    padding: 0 4px !important;
+
+    display: inline-block !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient #ds-med-allergy-list {
+
+    width: 240px !important;
+
+    height: 16px !important;
+
+    margin-left: 4px !important;
+
+    padding: 0 4px !important;
+
+    display: inline-block !important;
+
+  }
+
+
+
+  /* Section 3: Pupil Dilation Preference Box on Page 1 */
+
+  body.active-form-dr-side-patient .dr-side-dilation-box {
+
+    background-color: #f8fafc !important;
+
+    border: 1px solid #cbd5e1 !important;
+
+    border-radius: 5px !important;
+
+    padding: 7px 12px !important;
+
+    margin-top: 6px !important;
+
+    page-break-inside: avoid !important;
+
+    break-inside: avoid !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .dr-side-dilation-box div[style*="font-weight: 800"] {
+
+    font-size: 8pt !important;
+
+    margin-bottom: 3px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .dr-side-dilation-box p {
+
+    font-size: 6.8pt !important;
+
+    line-height: 1.25 !important;
+
+    margin-bottom: 4px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .dr-side-dilation-box .dilation-subtext {
+
+    padding-left: 18px !important;
+
+    font-size: 6.5pt !important;
+
+    line-height: 1.15 !important;
+
+    margin-bottom: 3px !important;
+
+  }
+
+
+
+  /* Page 2 Break and Page 2 Header */
+
+  body.active-form-dr-side-patient .dr-side-page-2-start {
+
+    page-break-before: always !important;
+
+    break-before: page !important;
+
+    margin-top: 0 !important;
+
+    padding-top: 0 !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .dr-side-page-2-header {
+
+    display: flex !important;
+
+    justify-content: space-between !important;
+
+    align-items: center !important;
+
+    border-bottom: 1.5px solid #000 !important;
+
+    padding-bottom: 4px !important;
+
+    margin-bottom: 8px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .dr-side-p2-title {
+
+    font-size: 10pt !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: 0.4px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .dr-side-p2-subtitle {
+
+    font-size: 7.5pt !important;
+
+    color: #444 !important;
+
+  }
+
+
+
+  /* Family History Table (12 rows, Page 2) */
+
+  body.active-form-dr-side-patient .fam-history-container {
+
+    padding: 4px 8px !important;
+
+    margin-bottom: 6px !important;
+
+    background-color: #ffffff !important;
+
+    border: 1px solid #cbd5e1 !important;
+
+    border-radius: 4px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .fam-table-header {
+
+    display: grid !important;
+
+    grid-template-columns: 140px 48px 1fr !important;
+
+    gap: 8px !important;
+
+    font-size: 6.8pt !important;
+
+    font-weight: 800 !important;
+
+    border-bottom: 1.5px solid #000 !important;
+
+    padding-bottom: 2px !important;
+
+    margin-bottom: 2px !important;
+
+    text-transform: uppercase !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .fam-key-note {
+
+    font-size: 6pt !important;
+
+    line-height: 1.15 !important;
+
+    margin-bottom: 3px !important;
+
+    padding-bottom: 2px !important;
+
+    color: #444 !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .fam-grid-row {
+
+    display: grid !important;
+
+    grid-template-columns: 140px 48px 1fr !important;
+
+    gap: 8px !important;
+
+    align-items: center !important;
+
+    border-bottom: 1px solid #e2e8f0 !important;
+
+    padding: 2.5px 0 !important;
+
+    font-size: 6.8pt !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .fam-cond-name {
+
+    font-size: 6.8pt !important;
+
+    font-weight: 600 !important;
+
+    line-height: 1.1 !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .fam-members-col {
+
+    display: flex !important;
+
+    flex-wrap: nowrap !important;
+
+    justify-content: space-between !important;
+
+    gap: 4px !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .fam-cb-label {
+
+    font-size: 6.4pt !important;
+
+    gap: 2px !important;
+
+    margin-bottom: 0 !important;
+
+    display: inline-flex !important;
+
+    align-items: center !important;
+
+  }
+
+
+
+  /* Section VII: HIPAA & Signatures */
+
+  body.active-form-dr-side-patient .dr-side-hipaa-box {
+
+    padding: 8px 12px !important;
+
+    font-size: 7.2pt !important;
+
+    line-height: 1.25 !important;
+
+    margin-bottom: 8px !important;
+
+    background-color: #f8fafc !important;
+
+    border: 1px solid #cbd5e1 !important;
+
+    border-radius: 4px !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient .signature-canvas-wrapper {
+
+    height: 52px !important;
+
+    border: none !important;
+
+    border-bottom: 1.5px solid #000 !important;
+
+    background: transparent !important;
+
+    border-radius: 0 !important;
+
+  }
+
+
+
+  body.active-form-dr-side-patient #ds-sig-date {
+
+    margin-top: 34px !important;
+
+    border-bottom: 1.5px solid #000 !important;
+
+  }
+
+
+
+  /* Scoped print overrides for active-form-pd-record to force exactly one page */
+
+  body.active-form-pd-record .pd-form-wrapper {
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    height: auto !important;
+
+    margin: 0 !important;
+
+    padding: 0.25in !important;
+
+    box-sizing: border-box !important;
+
+    page-break-inside: avoid !important;
+
+    page-break-after: avoid !important;
+
+  }
+
+
+
+  body.active-form-pd-record .pd-slip {
+
+    border: 1px solid #000 !important;
+
+    box-shadow: none !important;
+
+    border-radius: 0 !important;
+
+    padding: 15px !important;
+
+    box-sizing: border-box !important;
+
+    page-break-inside: avoid !important;
+
+    page-break-after: avoid !important;
+
+  }
+
+
+
+  body.active-form-pd-record .pd-control {
+
+    border: none !important;
+
+    border-bottom: 1px solid #000 !important;
+
+    border-radius: 0 !important;
+
+    background-color: transparent !important;
+
+    padding: 2px !important;
+
+    font-size: 9.5pt !important;
+
+    height: 18px !important;
+
+  }
+
+
+
+  body.active-form-pd-record .pd-section {
+
+    margin-bottom: 8px !important;
+
+  }
+
+
+
+  body.active-form-pd-record .pd-grid {
+
+    gap: 10px !important;
+
+  }
+
+
+
+  body.active-form-pd-record .pd-divider {
+
+    margin: 4px 0 !important;
+
+  }
+
+
+
+  body.active-form-pd-record .pd-signature-row {
+
+    margin-top: 5px !important;
+
+    padding-top: 10px !important;
+
+    page-break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-pd-record .signature-canvas-wrapper {
+
+    height: 50px !important;
+
+  }
+
+
+
+  /* Scoped print overrides for school excuses to hide inputs and format the printed slip */
+
+  body.active-form-school-excuse-james .excuse-slip-print,
+
+  body.active-form-school-excuse-carribyan .excuse-slip-print {
+
+    border: 1px solid #000 !important;
+
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+
+    padding: 0.25in !important;
+
+    margin: 0 !important;
+
+    width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    page-break-inside: avoid !important;
+
+    page-break-after: avoid !important;
+
+  }
+
+
+
+  /* Scoped print overrides for active-form-prior-auth to force exactly one page */
+
+  body.active-form-prior-auth .form-card {
+
+    padding: 0.25in !important;
+
+    margin: 0 !important;
+
+    min-height: auto !important;
+
+    page-break-after: avoid !important;
+
+    page-break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .form-section {
+
+    margin-bottom: 5px !important;
+
+    padding-bottom: 5px !important;
+
+    page-break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .form-header-block {
+
+    margin-bottom: 6px !important;
+
+    padding-bottom: 4px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .form-header-block h2 {
+
+    font-size: 1.0rem !important;
+
+    margin-bottom: 2px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .form-header-block p {
+
+    font-size: 0.75rem !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .form-section-title {
+
+    font-size: 0.7rem !important;
+
+    margin-bottom: 4px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .form-grid {
+
+    gap: 4px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .form-group {
+
+    margin-bottom: 2px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth label {
+
+    font-size: 7.5pt !important;
+
+    margin-bottom: 1px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .form-control {
+
+    height: 18px !important;
+
+    font-size: 0.75rem !important;
+
+    padding: 0px 3px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .checkbox-label {
+
+    font-size: 7.5pt !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .checkbox-label + div {
+
+    font-size: 7pt !important;
+
+    padding-left: 20px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .static-signature-wrapper {
+
+    height: 60px !important;
+
+    padding: 5px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .static-signature-wrapper img {
+
+    max-height: 50px !important;
+
+  }
+
+
+
+  body.active-form-prior-auth .form-section div[style*="background-color: var(--bg-primary)"] {
+
+    padding: 10px !important;
+
+    font-size: 7.5pt !important;
+
+    margin-bottom: 10px !important;
+
+    line-height: 1.3 !important;
+
+  }
+
+
+
+  /* Scoped print overrides for active-form-patient-info to force exactly one page */
+
+  body.active-form-patient-info .form-card {
+
+    padding: 0.05in !important;
+
+    margin: 0 !important;
+
+    min-height: auto !important;
+
+    page-break-after: avoid !important;
+
+    page-break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-section {
+
+    margin-bottom: 2px !important;
+
+    padding-bottom: 0px !important;
+
+    border-bottom: 1px solid #ddd !important;
+
+    page-break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-header-block {
+
+    margin-bottom: 2px !important;
+
+    padding-bottom: 1px !important;
+
+    border-bottom: 1.5px solid #000 !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-header-block h2 {
+
+    font-size: 0.8rem !important;
+
+    margin-bottom: 0px !important;
+
+    line-height: 1.1 !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-header-block p {
+
+    font-size: 0.55rem !important;
+
+    margin: 0 !important;
+
+    line-height: 1.1 !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-section-title {
+
+    font-size: 0.55rem !important;
+
+    margin-bottom: 2px !important;
+
+    padding-bottom: 0px !important;
+
+    font-weight: bold !important;
+
+    border-bottom: none !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-section-title svg {
+
+    display: none !important; /* Hide icons in print to save vertical space */
+
+  }
+
+
+
+  body.active-form-patient-info .form-grid {
+
+    gap: 1px 3px !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-group {
+
+    margin-bottom: 0px !important;
+
+    padding: 0 !important;
+
+  }
+
+
+
+  body.active-form-patient-info label {
+
+    font-size: 5pt !important;
+
+    margin-bottom: 0px !important;
+
+    line-height: 1.0 !important;
+
+    display: block !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-control {
+
+    height: 12px !important;
+
+    font-size: 5.5pt !important;
+
+    padding: 0px 1px !important;
+
+    line-height: 1.0 !important;
+
+  }
+
+
+
+  body.active-form-patient-info .checkbox-grid {
+
+    gap: 1px 3px !important;
+
+    margin-top: 1px !important; /* Override inline margin-top: 10px */
+
+  }
+
+
+
+  body.active-form-patient-info .radio-label,
+
+  body.active-form-patient-info .checkbox-label {
+
+    font-size: 5.5pt !important;
+
+    line-height: 1.0 !important;
+
+  }
+
+
+
+  body.active-form-patient-info .signature-canvas-wrapper {
+
+    height: 25px !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-section div[style*="background-color: var(--bg-primary)"] {
+
+    padding: 4px 6px !important;
+
+    font-size: 5pt !important;
+
+    margin-bottom: 4px !important;
+
+    line-height: 1.15 !important;
+
+    border-radius: 4px !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-section div[style*="background-color: var(--bg-primary)"] p {
+
+    margin: 0 0 2px 0 !important;
+
+  }
+
+
+
+  body.active-form-patient-info .form-section div[style*="background-color: var(--bg-primary)"] p:last-child {
+
+    margin-bottom: 0 !important;
+
+  }
+
+
+
+  /* Override hardcoded inline style on Date Signed input parent or self */
+
+  body.active-form-patient-info #p-sig-date {
+
+    margin-top: 0px !important;
+
+  }
+
+
+
+  /* ==========================================
+
+     EYEGLASS JOB NOTE PRINT RULES (HALF-PAGE FIT)
+
+     ========================================== */
+
+  body.active-form-eyeglass-job-note .job-note-card {
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    margin: 0 !important;
+
+    padding: 0.25in !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    background-color: #fff !important;
+
+    color: #000 !important;
+
+    page-break-after: avoid !important;
+
+    page-break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-header {
+
+    margin-bottom: 4px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-main-title {
+
+    font-size: 15pt !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-subtitle {
+
+    font-size: 9pt !important;
+
+    color: #333 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-header-divider {
+
+    height: 2px !important;
+
+    background-color: #000 !important;
+
+    margin-top: 2px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-meta-grid {
+
+    margin-bottom: 6px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-meta-row {
+
+    gap: 14px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-field-label {
+
+    font-size: 9pt !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-line-input {
+
+    border: none !important;
+
+    border-bottom: 1px solid #000 !important;
+
+    font-size: 9.5pt !important;
+
+    padding: 1px 2px !important;
+
+    height: 16px !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-section {
+
+    margin-bottom: 6px !important;
+
+    page-break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-section-banner {
+
+    background-color: #f1f5f9 !important;
+
+    border-left: 3.5px solid #000 !important;
+
+    padding: 2px 6px !important;
+
+    margin-bottom: 4px !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-banner-text {
+
+    font-size: 8.8pt !important;
+
+    font-weight: 800 !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-checkbox-grid {
+
+    column-gap: 16px !important;
+
+    row-gap: 2px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-checkbox-col {
+
+    gap: 2px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-check-label {
+
+    font-size: 8.8pt !important;
+
+    line-height: 1.15 !important;
+
+    gap: 6px !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-checkbox {
+
+    width: 12px !important;
+
+    height: 12px !important;
+
+    border: 1px solid #000 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-other-block {
+
+    margin-top: 3px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-other-block .other-title-label {
+
+    font-size: 8.8pt !important;
+
+    margin-bottom: 2px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-ruled-textarea {
+
+    line-height: 18px !important;
+
+    font-size: 9pt !important;
+
+    height: 36px !important;
+
+    color: #000 !important;
+
+    background-image: linear-gradient(transparent, transparent 17px, #000 17px, #000 18px) !important;
+
+    background-size: 100% 18px !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-dotted-separator {
+
+    border-top: 1px dotted #444 !important;
+
+    margin: 4px 0 4px 0 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-action-row {
+
+    margin: 2px 0 4px 0 !important;
+
+    gap: 8px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-footer-divider {
+
+    border-top: 1px solid #000 !important;
+
+    margin: 4px 0 4px 0 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-footer-row {
+
+    gap: 14px !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-block {
+
+    align-items: flex-start !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-label {
+
+    padding-top: 10px !important;
+
+    font-size: 8.8pt !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-status-label {
+
+    font-size: 8.8pt !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-col {
+
+    flex: 1 !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-display {
+
+    width: 100% !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-image-wrapper {
+
+    height: 30px !important;
+
+    border-bottom: 1px solid #000 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-img {
+
+    max-height: 28px !important;
+
+    max-width: 100% !important;
+
+    object-fit: contain !important;
+
+    display: block !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-subline {
+
+    display: block !important;
+
+    margin-top: 2px !important;
+
+    text-align: center !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-name {
+
+    font-size: 7.2pt !important;
+
+    font-weight: 700 !important;
+
+    color: #000 !important;
+
+    text-align: center !important;
+
+    margin-top: 2px !important;
+
+    line-height: 1.1 !important;
+
+    white-space: nowrap !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-toggle-btn {
+
+    display: none !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .job-note-sig-target-wrapper .signature-canvas-wrapper {
+
+    height: 30px !important;
+
+    border-bottom: 1px solid #000 !important;
+
+  }
+
+
+
+  body.active-form-eyeglass-job-note .status-input {
+
+    border-bottom: 1px solid #000 !important;
+
+    font-size: 9pt !important;
+
+    height: 16px !important;
+
+  }
+
+
+
+  /* Blank print mode: hide signature image */
+
+  .print-blank-active .job-note-sig-img {
+
+    visibility: hidden !important;
+
+    opacity: 0 !important;
+
+  }
+
+
+
+  /* Embedded Standalone HTML Documents & PDF Viewers Print Handling */
+
+  body.active-form-staff-schedule aside.sidebar,
+
+  body.active-form-staff-schedule header.actions-header,
+
+  body.active-form-notes-to-dr aside.sidebar,
+
+  body.active-form-notes-to-dr header.actions-header,
+
+  body[class*="active-form-insurance-"] aside.sidebar,
+
+  body[class*="active-form-insurance-"] header.actions-header {
+
+    display: none !important;
+
+  }
+
+
+
+  body.active-form-staff-schedule .embedded-doc-iframe,
+
+  body.active-form-notes-to-dr .embedded-doc-iframe,
+
+  body[class*="active-form-insurance-"] .embedded-doc-iframe {
+
+    width: 100vw !important;
+
+    height: 100vh !important;
+
+    border: none !important;
+
+  }
+
+
+
+  /* =========================================================
+
+     PAL OPTICAL ITEMIZED RECEIPT PRINT STYLES
+
+     ========================================================= */
+
+  body.active-form-itemized-receipt {
+
+    background-color: #fff !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .itemized-receipt-wrapper {
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    width: 100% !important;
+
+    display: block !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .itemized-receipt-toolbar {
+
+    display: none !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .itemized-receipt-container {
+
+    box-shadow: none !important;
+
+    border: none !important;
+
+    padding: 0.25in !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    min-height: 10.5in !important;
+
+    height: 10.5in !important;
+
+    box-sizing: border-box !important;
+
+    page-break-after: avoid !important;
+
+    page-break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-input,
+
+  body.active-form-itemized-receipt .ir-table-input,
+
+  body.active-form-itemized-receipt .ir-pmt-field,
+
+  body.active-form-itemized-receipt .ir-coupon-input {
+
+    border: none !important;
+
+    background: transparent !important;
+
+    box-shadow: none !important;
+
+    outline: none !important;
+
+    color: #000 !important;
+
+    padding: 0 !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-row-delete-btn,
+
+  body.active-form-itemized-receipt .col-action,
+
+  body.active-form-itemized-receipt .ir-pmt-action,
+
+  body.active-form-itemized-receipt .ir-table-actions,
+
+  body.active-form-itemized-receipt .ir-add-line-btn,
+
+  body.active-form-itemized-receipt .ir-row-action-group,
+
+  body.active-form-itemized-receipt .ir-row-btn,
+
+  body.active-form-itemized-receipt .ir-disc-pill {
+
+    display: none !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-discount-row {
+
+    background: transparent !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-disc-amt {
+
+    color: #000 !important;
+
+    font-weight: normal !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-table {
+
+    border-top: 1.5px solid #000 !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-table-header-row {
+
+    border-bottom: 2.5px solid #000 !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-line-above {
+
+    border-top: 1px solid #000 !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-double-underline {
+
+    border-bottom: 3px double #000 !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-coupon-top-line {
+
+    border-top: 1px solid #000 !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-coupon-box-val {
+
+    border: 1px solid #000 !important;
+
+    background: transparent !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-coupon-box-input {
+
+    border: none !important;
+
+    background: transparent !important;
+
+    color: #000 !important;
+
+    padding: 0 !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-fin-ins-discount.ir-zero-hidden {
+
+    display: none !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-fin-ins-discount {
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-fin-ins-discount .ir-input-fin {
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-fin-label-input {
+
+    border: none !important;
+
+    background: transparent !important;
+
+    color: #000 !important;
+
+    padding: 0 !important;
+
+    font-size: 8.5pt !important;
+
+    font-weight: 700 !important;
+
+    text-align: right !important;
+
+    min-width: 150px !important;
+
+  }
+
+
+
+  body.active-form-itemized-receipt .ir-tax-rate-btn {
+
+    display: none !important;
+
+  }
+
+
+
+  /* Blank print mode: hide entered data */
+
+  .print-blank-active body.active-form-itemized-receipt .ir-input,
+
+  .print-blank-active body.active-form-itemized-receipt .ir-table-input,
+
+  .print-blank-active body.active-form-itemized-receipt .ir-pmt-field,
+
+  .print-blank-active body.active-form-itemized-receipt .ir-coupon-input,
+
+  .print-blank-active body.active-form-itemized-receipt .ir-coupon-box-input,
+
+  .print-blank-active body.active-form-itemized-receipt .ir-coupon-text,
+
+  .print-blank-active body.active-form-itemized-receipt .ir-calculated-val,
+
+  .print-blank-active body.active-form-itemized-receipt .ir-sum-val,
+
+  .print-blank-active body.active-form-itemized-receipt .coupon-value {
+
+    visibility: hidden !important;
+
+    opacity: 0 !important;
+
+  }
+
+
+
+  /* ===================================================
+
+     ITEMIZED STATEMENT REQUEST FORM (TRACY) PRINT STYLES
+
+     =================================================== */
+
+
+
+  body.active-form-itemized-statement-request,
+
+  body.active-form-itemized-statement-request .app-container,
+
+  body.active-form-itemized-statement-request .main-panel,
+
+  body.active-form-itemized-statement-request .form-viewport {
+
+    height: 100% !important;
+
+    max-height: 100% !important;
+
+    overflow: hidden !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .statement-request-card {
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    padding: 0.25in !important;
+
+    margin: 0 !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    page-break-inside: avoid !important;
+
+    page-break-after: avoid !important;
+
+    background: #fff !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .statement-request-brand .brand-title {
+
+    font-size: 1.45rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .statement-request-brand .brand-subtitle {
+
+    font-size: 0.72rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .statement-request-badge {
+
+    border: 1.5px solid #000 !important;
+
+    background: #f8fafc !important;
+
+    padding: 4px 10px !important;
+
+    print-color-adjust: exact;
+
+    -webkit-print-color-adjust: exact;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .statement-request-badge .badge-title {
+
+    color: #000 !important;
+
+    font-size: 0.85rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .statement-request-badge .badge-attn {
+
+    font-size: 0.72rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .statement-request-divider {
+
+    background: #000 !important;
+
+    height: 2px !important;
+
+    margin: 4px 0 6px 0 !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .routing-meta-bar {
+
+    background: #f8fafc !important;
+
+    border: 1px solid #000 !important;
+
+    padding: 3px 6px !important;
+
+    margin-bottom: 6px !important;
+
+    print-color-adjust: exact;
+
+    -webkit-print-color-adjust: exact;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .routing-meta-bar .meta-field {
+
+    font-size: 0.72rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .routing-meta-bar .meta-input {
+
+    border: none !important;
+
+    border-bottom: 1px solid #000 !important;
+
+    border-radius: 0 !important;
+
+    background: transparent !important;
+
+    padding: 1px 3px !important;
+
+    font-size: 0.78rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .routing-meta-bar .meta-select {
+
+    border: none !important;
+
+    border-bottom: 1px solid #000 !important;
+
+    background: transparent !important;
+
+    font-size: 0.78rem !important;
+
+    padding: 0 2px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .form-section-panel {
+
+    border: 1px solid #94a3b8 !important;
+
+    padding: 4px 8px !important;
+
+    margin-bottom: 5px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .panel-header {
+
+    color: #000 !important;
+
+    border-bottom: 1px solid #000 !important;
+
+    margin-bottom: 3px !important;
+
+    padding-bottom: 2px !important;
+
+    font-size: 0.72rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .form-grid {
+
+    gap: 3px 8px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .form-group {
+
+    gap: 1px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .form-group label {
+
+    font-size: 0.68rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .field-hint {
+
+    display: none !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .form-control {
+
+    border: none !important;
+
+    border-bottom: 1px solid #000 !important;
+
+    border-radius: 0 !important;
+
+    background: transparent !important;
+
+    padding: 1px 3px !important;
+
+    height: 18px !important;
+
+    font-size: 0.82rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .currency-input-wrap {
+
+    position: relative !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    width: 100% !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .currency-prefix {
+
+    position: absolute !important;
+
+    left: 3px !important;
+
+    top: 50% !important;
+
+    transform: translateY(-50%) !important;
+
+    font-size: 0.88rem !important;
+
+    font-weight: 800 !important;
+
+    color: #000 !important;
+
+    line-height: 1 !important;
+
+    pointer-events: none !important;
+
+    user-select: none !important;
+
+    z-index: 2 !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .currency-input {
+
+    padding-left: 20px !important;
+
+    font-size: 0.85rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .card-types-grid {
+
+    gap: 4px 10px !important;
+
+    margin-top: 1px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .card-radio-label {
+
+    font-size: 0.75rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .delivery-options-bar {
+
+    gap: 12px !important;
+
+    padding: 1px 0 !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .delivery-check-label {
+
+    font-size: 0.75rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .notes-textarea {
+
+    border: 1px solid #000 !important;
+
+    border-radius: 3px !important;
+
+    height: 28px !important;
+
+    font-size: 0.78rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .statement-request-disclaimer-box {
+
+    border: 1.5px solid #000 !important;
+
+    background: #fff !important;
+
+    padding: 4px 8px !important;
+
+    margin-bottom: 5px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .disclaimer-header {
+
+    color: #000 !important;
+
+    font-size: 0.72rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .disclaimer-text {
+
+    color: #000 !important;
+
+    font-size: 0.75rem !important;
+
+    margin: 2px 0 3px 0 !important;
+
+    line-height: 1.2 !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .disclaimer-checklist {
+
+    border: 1px dashed #000 !important;
+
+    background: #f8fafc !important;
+
+    padding: 3px 6px !important;
+
+    gap: 8px !important;
+
+    print-color-adjust: exact;
+
+    -webkit-print-color-adjust: exact;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .disclaimer-check-label {
+
+    color: #000 !important;
+
+    font-size: 0.74rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .clerk-processing-box {
+
+    border: 1.5px solid #000 !important;
+
+    background: #fff !important;
+
+    padding: 4px 8px !important;
+
+    margin-top: 4px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .clerk-box-header {
+
+    border-bottom: 1px solid #000 !important;
+
+    padding-bottom: 2px !important;
+
+    margin-bottom: 3px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .clerk-title {
+
+    font-size: 0.72rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .clerk-status-wrap {
+
+    font-size: 0.7rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .clerk-select {
+
+    font-size: 0.7rem !important;
+
+    border: 1px solid #000 !important;
+
+    padding: 1px 3px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .clerk-grid {
+
+    gap: 6px !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .clerk-field {
+
+    font-size: 0.68rem !important;
+
+  }
+
+
+
+  body.active-form-itemized-statement-request .clerk-line-input {
+
+    border-bottom: 1px solid #000 !important;
+
+    font-size: 0.75rem !important;
+
+    padding: 1px 2px !important;
+
+  }
+
+
+
+  /* Blank print mode: clear entered inputs for hand-filling */
+
+  .print-blank-active body.active-form-itemized-statement-request input[type="text"],
+
+  .print-blank-active body.active-form-itemized-statement-request input[type="tel"],
+
+  .print-blank-active body.active-form-itemized-statement-request input[type="email"],
+
+  .print-blank-active body.active-form-itemized-statement-request textarea {
+
+    color: transparent !important;
+
+  }
+
+
+
+  .print-blank-active body.active-form-itemized-statement-request input[type="checkbox"],
+
+  .print-blank-active body.active-form-itemized-statement-request input[type="radio"] {
+
+    accent-color: transparent !important;
+
+    opacity: 0.4 !important;
+
+  }
+
+
+
+  /* =========================================================
+
+     WAIVERS & CONSENTS 2-UP BLANK HALF-SHEET PRINT STYLES
+
+     ========================================================= */
+
+  body.print-blank-active.active-form-child-no-poly,
+
+  body.print-blank-active.active-form-expired-rx,
+
+  body.print-blank-active.active-form-frame-no-child,
+
+  body.print-blank-active.active-form-patients-own-frame,
+
+  body.print-blank-active.active-form-semi-rimless,
+
+  body.print-blank-active.active-form-single-vision,
+
+  body.print-blank-active.active-form-bilingual-lens,
+
+  body.print-blank-active.active-form-patient-info,
+
+  body.print-blank-active.active-form-child-no-poly .app-container,
+
+  body.print-blank-active.active-form-expired-rx .app-container,
+
+  body.print-blank-active.active-form-frame-no-child .app-container,
+
+  body.print-blank-active.active-form-patients-own-frame .app-container,
+
+  body.print-blank-active.active-form-semi-rimless .app-container,
+
+  body.print-blank-active.active-form-single-vision .app-container,
+
+  body.print-blank-active.active-form-bilingual-lens .app-container,
+
+  body.print-blank-active.active-form-patient-info .app-container,
+
+  body.print-blank-active.active-form-child-no-poly .main-panel,
+
+  body.print-blank-active.active-form-expired-rx .main-panel,
+
+  body.print-blank-active.active-form-frame-no-child .main-panel,
+
+  body.print-blank-active.active-form-patients-own-frame .main-panel,
+
+  body.print-blank-active.active-form-semi-rimless .main-panel,
+
+  body.print-blank-active.active-form-single-vision .main-panel,
+
+  body.print-blank-active.active-form-bilingual-lens .main-panel,
+
+  body.print-blank-active.active-form-patient-info .main-panel,
+
+  body.print-blank-active.active-form-child-no-poly .form-viewport,
+
+  body.print-blank-active.active-form-expired-rx .form-viewport,
+
+  body.print-blank-active.active-form-frame-no-child .form-viewport,
+
+  body.print-blank-active.active-form-patients-own-frame .form-viewport,
+
+  body.print-blank-active.active-form-semi-rimless .form-viewport,
+
+  body.print-blank-active.active-form-single-vision .form-viewport,
+
+  body.print-blank-active.active-form-bilingual-lens .form-viewport,
+
+  body.print-blank-active.active-form-patient-info .form-viewport {
+
+    height: 11in !important;
+
+    max-height: 11in !important;
+
+    overflow: hidden !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    background: #fff !important;
+
+  }
+
+
+
+  body.print-blank-active.active-form-child-no-poly .form-card,
+
+  body.print-blank-active.active-form-expired-rx .form-card,
+
+  body.print-blank-active.active-form-frame-no-child .form-card,
+
+  body.print-blank-active.active-form-patients-own-frame .form-card,
+
+  body.print-blank-active.active-form-semi-rimless .form-card,
+
+  body.print-blank-active.active-form-single-vision .form-card,
+
+  body.print-blank-active.active-form-bilingual-lens .form-card,
+
+  body.print-blank-active.active-form-patient-info .form-card,
+
+  body.print-blank-active .waiver-interactive-view {
+
+    display: none !important;
+
+  }
+
+
+
+  body.print-blank-active .waiver-blank-2up-sheet {
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    justify-content: space-between !important;
+
+    width: 8.5in !important;
+
+    max-width: 8.5in !important;
+
+    height: 11in !important;
+
+    max-height: 11in !important;
+
+    padding: 0.22in 0.45in !important;
+
+    margin: 0 auto !important;
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    box-sizing: border-box !important;
+
+    page-break-after: avoid !important;
+
+    page-break-inside: avoid !important;
+
+    break-after: avoid !important;
+
+    break-inside: avoid !important;
+
+    overflow: hidden !important;
+
+    background: #fff !important;
+
+  }
+
+
+
+  body.print-blank-active .waiver-half-page {
+
+    height: 5.15in !important;
+
+    max-height: 5.15in !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    justify-content: space-between !important;
+
+    page-break-inside: avoid !important;
+
+    break-inside: avoid !important;
+
+    overflow: hidden !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-header {
+
+    display: flex !important;
+
+    justify-content: space-between !important;
+
+    align-items: flex-end !important;
+
+    border-bottom: 2px solid #000 !important;
+
+    padding-bottom: 3px !important;
+
+    margin-bottom: 4px !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-brand-title {
+
+    font-size: 13pt !important;
+
+    font-weight: 800 !important;
+
+    color: #000 !important;
+
+    line-height: 1.1 !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-brand-sub {
+
+    font-size: 6.8pt !important;
+
+    color: #333 !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-doc-title {
+
+    font-size: 9.5pt !important;
+
+    font-weight: 800 !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-doc-subtitle {
+
+    font-size: 7.2pt !important;
+
+    color: #444 !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-demographics-row {
+
+    display: flex !important;
+
+    gap: 12px !important;
+
+    align-items: flex-end !important;
+
+    margin-bottom: 4px !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-field {
+
+    display: flex !important;
+
+    align-items: flex-end !important;
+
+    gap: 4px !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-field-label {
+
+    font-size: 7.2pt !important;
+
+    font-weight: 700 !important;
+
+    color: #000 !important;
+
+    white-space: nowrap !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-field-line {
+
+    border-bottom: 1px solid #000 !important;
+
+    flex: 1 !important;
+
+    min-height: 14px !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-doc-badge {
+
+    font-size: 6.8pt !important;
+
+    font-weight: 800 !important;
+
+    color: #000 !important;
+
+    letter-spacing: 0.5px !important;
+
+    margin-top: 2px !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-warning-box {
+
+    border: 1.2px solid #000 !important;
+
+    border-left: 3.5px solid #000 !important;
+
+    background-color: #f8fafc !important;
+
+    border-radius: 4px !important;
+
+    padding: 4px 6px !important;
+
+    margin-bottom: 4px !important;
+
+    font-size: 6.7pt !important;
+
+    line-height: 1.2 !important;
+
+    color: #000 !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-warning-box-title {
+
+    font-weight: 850 !important;
+
+    text-transform: uppercase !important;
+
+    letter-spacing: 0.3px !important;
+
+    margin-bottom: 2px !important;
+
+    color: #000 !important;
+
+    font-size: 6.8pt !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-disclosure-box {
+
+    border: 1px solid #000 !important;
+
+    background-color: #fafafa !important;
+
+    border-radius: 4px !important;
+
+    padding: 5px 8px !important;
+
+    margin-bottom: 5px !important;
+
+    font-size: 6.8pt !important;
+
+    line-height: 1.25 !important;
+
+    color: #000 !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-es-text {
+
+    font-style: italic !important;
+
+    color: #444 !important;
+
+    border-top: 1px dashed #cbd5e1 !important;
+
+    padding-top: 3px !important;
+
+    margin-top: 3px !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-box-square {
+
+    width: 11px !important;
+
+    height: 11px !important;
+
+    border: 1.2px solid #000 !important;
+
+    background: #fff !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-signatures-row {
+
+    display: flex !important;
+
+    justify-content: space-between !important;
+
+    gap: 16px !important;
+
+    margin-top: 4px !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-sig-line {
+
+    border-bottom: 1px solid #000 !important;
+
+    height: 20px !important;
+
+    margin-bottom: 2px !important;
+
+  }
+
+
+
+  body.print-blank-active .wb-sig-label {
+
+    font-size: 6.5pt !important;
+
+    font-weight: 700 !important;
+
+    color: #000 !important;
+
+  }
+
+
+
+  body.print-blank-active .waiver-cut-line {
+
+    margin: 2px 0 !important;
+
+    height: 14px !important;
+
+    page-break-inside: avoid !important;
+
+    break-inside: avoid !important;
+
+  }
+
+
+
+  body.print-blank-active .waiver-cut-line::before {
+
+    border-top: 1.5px dotted #cbd5e1 !important; /* very light grey */
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.print-blank-active .waiver-cut-line .cut-line-indicator {
+
+    background: #fff !important;
+
+    color: #94a3b8 !important; /* very light grey */
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.print-blank-active .waiver-cut-line svg {
+
+    stroke: #94a3b8 !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+}
+
+
+
+
+
+
+
+/* ==========================================================================
+
+   CONTACT LENS ORDER SHEET - PRINT REPLICA (EXACT MATCH TO PHYSICAL FORM)
+
+   ========================================================================== */
+
+
+
+@page contact-lens-sheet {
+
+  size: letter landscape !important;
+
+  margin: 0.35in !important;
+
+}
+
+
+
+body.active-form-contact-lens-order {
+
+  page: contact-lens-sheet !important;
+
+}
+
+
+
+@media print {
+
+  body.active-form-contact-lens-order {
+
+    background-color: #ffffff !important;
+
+    color: #000000 !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    width: 100% !important;
+
+    height: 100% !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .bento-dock,
+
+  body.active-form-contact-lens-order aside.sidebar,
+
+  body.active-form-contact-lens-order header.actions-header,
+
+  body.active-form-contact-lens-order .mobile-menu-btn,
+
+  body.active-form-contact-lens-order .no-print {
+
+    display: none !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .form-viewport,
+
+  body.active-form-contact-lens-order .main-panel,
+
+  body.active-form-contact-lens-order .app-container {
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    height: auto !important;
+
+    width: 100% !important;
+
+    background: transparent !important;
+
+    overflow: visible !important;
+
+    display: block !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-main-container {
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-sheet-canvas-wrapper {
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    width: 100% !important;
+
+    display: block !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-sheet-canvas {
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    background: #ffffff !important;
+
+    page-break-inside: avoid !important;
+
+    break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-title-header {
+
+    font-family: "ArialMT", Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+
+    font-size: 48pt !important;
+
+    font-weight: 400 !important;
+
+    letter-spacing: normal !important;
+
+    text-align: center !important;
+
+    color: #000000 !important;
+
+    margin: 0 0 16pt 0 !important;
+
+    padding: 0 !important;
+
+    text-transform: uppercase !important;
+
+    line-height: 1.05 !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-table {
+
+    width: 100% !important;
+
+    border-collapse: collapse !important;
+
+    border: 2px solid #000000 !important;
+
+    table-layout: fixed !important;
+
+    background: #ffffff !important;
+
+    margin: 0 auto !important;
+
+    page-break-inside: avoid !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-table th {
+
+    border: 1px solid #000000 !important;
+
+    font-family: "Arial-BoldMT", Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+
+    font-size: 11pt !important;
+
+    font-weight: bold !important;
+
+    letter-spacing: normal !important;
+
+    text-align: center !important;
+
+    vertical-align: middle !important;
+
+    padding: 6px 4px !important;
+
+    line-height: 1.2 !important;
+
+    color: #000000 !important;
+
+    background: #ffffff !important;
+
+    text-transform: uppercase !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-table td {
+
+    border: 1px solid #000000 !important;
+
+    height: 33px !important;
+
+    min-height: 33px !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    vertical-align: middle !important;
+
+    background: #ffffff !important;
+
+    -webkit-print-color-adjust: exact !important;
+
+    print-color-adjust: exact !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-th-name,
+
+  body.active-form-contact-lens-order .clo-td-name {
+
+    width: 22.5% !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-th-dob,
+
+  body.active-form-contact-lens-order .clo-td-dob {
+
+    width: 16.0% !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-th-phone,
+
+  body.active-form-contact-lens-order .clo-td-phone {
+
+    width: 24.0% !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-th-boxes,
+
+  body.active-form-contact-lens-order .clo-td-boxes {
+
+    width: 17.0% !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-th-instructions,
+
+  body.active-form-contact-lens-order .clo-td-instructions {
+
+    width: 20.5% !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-input {
+
+    border: none !important;
+
+    box-shadow: none !important;
+
+    background: transparent !important;
+
+    font-family: "ArialMT", Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+
+    font-size: 11pt !important;
+
+    font-weight: normal !important;
+
+    color: #000000 !important;
+
+    padding: 2px 6px !important;
+
+    height: 100% !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-input-name {
+
+    text-align: left !important;
+
+    padding-left: 8px !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-input-dob,
+
+  body.active-form-contact-lens-order .clo-input-phone,
+
+  body.active-form-contact-lens-order .clo-input-boxes {
+
+    text-align: center !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-input-instructions {
+
+    text-align: left !important;
+
+    padding-left: 6px !important;
+
+  }
+
+
+
+  /* When printing blank: completely hide any input text & placeholder */
+
+  body.active-form-contact-lens-order.print-blank-active .clo-input,
+
+  body.active-form-contact-lens-order.mode-print-blank .clo-input,
+
+  body.active-form-contact-lens-order .clo-force-blank .clo-input {
+
+    color: transparent !important;
+
+  }
+
+
+
+  body.active-form-contact-lens-order .clo-input::placeholder {
+
+    color: transparent !important;
+
+  }
+
+}
+
+
+
+/* ==========================================================================
+   WAITING TO BE PICKED UP SHEET (50 ROWS) - EXACT PRINT REPLICA
+   ========================================================================== */
+
+@page contact-lens-pickup-sheet {
+  size: letter landscape !important;
+  margin: 0.25in !important;
+}
+
+body.active-form-contact-lens-pickup,
+body.printing-pickup-sheet {
+  page: contact-lens-pickup-sheet !important;
+}
+
+@media print {
+  body.active-form-contact-lens-pickup .clo-top-nav,
+  body.active-form-contact-lens-pickup .bento-dock,
+  body.active-form-contact-lens-pickup aside.sidebar,
+  body.active-form-contact-lens-pickup header.actions-header,
+  body.active-form-contact-lens-pickup .no-print,
+  body.printing-pickup-sheet .clo-top-nav,
+  body.printing-pickup-sheet .bento-dock,
+  body.printing-pickup-sheet aside.sidebar,
+  body.printing-pickup-sheet header.actions-header,
+  body.printing-pickup-sheet .no-print,
+  body.printing-pickup-sheet .non-printable-tab {
+    display: none !important;
+  }
+
+  body.printing-daily-pad .clo-pickup-sheet-wrapper,
+  body.printing-daily-pad .non-printable-tab {
+    display: none !important;
+  }
+
+  body.active-form-contact-lens-pickup .clo-pickup-sheet-wrapper,
+  body.printing-pickup-sheet .clo-pickup-sheet-wrapper {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  body.active-form-contact-lens-pickup .clo-pickup-sheet-canvas,
+  body.printing-pickup-sheet .clo-pickup-sheet-canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  .cl-pickup-sheet-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1px solid #000000 !important;
+    table-layout: fixed !important;
+    background: #ffffff !important;
+    font-family: Arial, "ArialMT", Helvetica, sans-serif !important;
+    font-size: 8pt !important;
+    page-break-inside: auto !important;
+  }
+
+  .cl-pickup-sheet-table thead {
+    display: table-header-group !important;
+  }
+
+  .cl-pickup-sheet-table tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  .cl-pickup-sheet-table th {
+    border: 1px solid #000000 !important;
+    font-family: Arial, "Arial-BoldMT", Helvetica, sans-serif !important;
+    font-size: 8.5pt !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 3px 2px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    line-height: 1.15 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .cl-pickup-sheet-table td {
+    border: 1px solid #000000 !important;
+    padding: 2px 3px !important;
+    vertical-align: middle !important;
+    height: 20pt !important;
+    line-height: 1.15 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 8pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .cl-pickup-sheet-table .col-date-ordered { width: 7.5% !important; text-align: center !important; }
+  .cl-pickup-sheet-table .col-patient { width: 16.5% !important; text-align: left !important; }
+  .cl-pickup-sheet-table .col-phone { width: 11.5% !important; text-align: center !important; }
+  .cl-pickup-sheet-table .col-brand { width: 15.5% !important; text-align: left !important; }
+  .cl-pickup-sheet-table .col-rx-r { width: 8.5% !important; text-align: center !important; }
+  .cl-pickup-sheet-table .col-qty-r { width: 2.5% !important; text-align: center !important; }
+  .cl-pickup-sheet-table .col-rx-l { width: 8.5% !important; text-align: center !important; }
+  .cl-pickup-sheet-table .col-qty-l { width: 2.5% !important; text-align: center !important; }
+  .cl-pickup-sheet-table .col-amt { width: 6.5% !important; text-align: center !important; }
+  .cl-pickup-sheet-table .col-pd { width: 3.5% !important; text-align: center !important; }
+  .cl-pickup-sheet-table .col-received { width: 8.0% !important; text-align: center !important; }
+  .cl-pickup-sheet-table .col-drawer { width: 4.5% !important; text-align: center !important; font-weight: bold !important; }
+  .cl-pickup-sheet-table .col-called { width: 8.5% !important; text-align: center !important; }
+
+  .patient-name {
+    font-weight: bold !important;
+    color: #000000 !important;
+  }
+
+  .patient-note {
+    font-size: 7.5pt !important;
+    color: #000000 !important;
+    font-weight: normal !important;
+    display: block !important;
+  }
+
+  .pickup-cell-input {
+    border: none !important;
+    background: transparent !important;
+    font-family: Arial, "ArialMT", Helvetica, sans-serif !important;
+    font-size: 8pt !important;
+    text-align: center !important;
+    padding: 0 !important;
+    color: #000000 !important;
+  }
+
+  /* Blank printing for pickup sheet */
+  body.print-blank-active .cl-pickup-sheet-table td,
+  body.active-form-contact-lens-pickup.print-blank-active .pickup-cell-input,
+  .clo-force-blank .pickup-cell-input,
+  .clo-force-blank .patient-name,
+  .clo-force-blank .patient-note,
+  .clo-force-blank .phone-cell-content,
+  .clo-force-blank .brand-cell-content,
+  .clo-force-blank td {
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+}

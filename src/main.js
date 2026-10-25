@@ -3,6 +3,16 @@
    Contact Lens Ordering System - Pal Optical
    ========================================================================== */
 
+// Exclusive Domain Access Enforcement: https://clordersystem.vercel.app/
+(function enforceExclusiveDomain() {
+  const currentHost = window.location.hostname;
+  const isLocal = currentHost === 'localhost' || currentHost === '127.0.0.1' || currentHost.startsWith('192.168.');
+  const targetHost = 'clordersystem.vercel.app';
+  if (!isLocal && currentHost !== targetHost) {
+    window.location.replace(`https://${targetHost}${window.location.pathname}${window.location.search}${window.location.hash}`);
+  }
+})();
+
 import { SplashScreen } from './splash.js';
 import { AuthController } from './auth.js';
 import { ContactLensOrderForm } from './closCore.js';

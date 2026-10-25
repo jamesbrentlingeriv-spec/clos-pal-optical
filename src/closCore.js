@@ -1043,7 +1043,7 @@ export class ContactLensOrderForm {
 
     const verify = () => {
       const val = passInput.value.trim().toLowerCase();
-      if (val === 'pal') {
+      if (val === 'eye_doctor') {
         sessionStorage.setItem('clos-doctor-session-auth', 'true');
         modalEl.remove();
         onSuccess();
@@ -3735,11 +3735,15 @@ export class ContactLensOrderForm {
       input.addEventListener('change', (e) => {
         const orderId = input.getAttribute('data-order-id');
         const field = input.getAttribute('data-field');
-        // 'paid' is freely editable by front desk staff without doctor's password
-        if (field === 'paid') {
+        // Allowed for staff without doctor authorization:
+        // 1. How they paid ('paid')
+        // 2. Which drawer they were in ('drawer')
+        // 3. When they were called ('dateCalled')
+        const staffAllowed = ['paid', 'drawer', 'dateCalled'];
+        if (staffAllowed.includes(field)) {
           this.updatePickupField(orderId, field, e.target.value);
         } else {
-          // All other fields on waiting contacts require doctor's password
+          // All other fields on waiting contacts require doctor's password ('eye_doctor')
           this.promptDoctorAuth(`modify ${field} for this contact lens order`, () => {
             this.updatePickupField(orderId, field, e.target.value);
           }, () => {
@@ -3773,7 +3777,7 @@ export class ContactLensOrderForm {
 
         const id = btn.getAttribute('data-order-id');
 
-        this.promptDoctorAuth('log date called', () => this.markOrderCalledToday(id));
+        this.markOrderCalledToday(id);
 
       });
 
@@ -3787,7 +3791,7 @@ export class ContactLensOrderForm {
 
         const id = btn.getAttribute('data-order-id');
 
-        this.promptDoctorAuth('log voicemail status', () => this.markOrderLvm(id));
+        this.markOrderLvm(id);
 
       });
 

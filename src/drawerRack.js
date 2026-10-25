@@ -60,8 +60,8 @@ export class DrawerRack {
               <span>Amt: <strong>${item.amtDue || 'trials'}</strong></span>
             </div>
             <div class="clos-drawer-item-actions">
-              <button type="button" class="clos-mini-btn btn-call" data-action="call" data-order-id="${item.id}" title="Requires Doctor Authorization">
-                🔒 Log Called
+              <button type="button" class="clos-mini-btn btn-call" data-action="call" data-order-id="${item.id}" title="Log Called Today">
+                📞 Log Called
               </button>
               <button type="button" class="clos-mini-btn btn-pickup" data-action="pickup" data-order-id="${item.id}" title="Staff Checkout">
                 ✅ Picked Up
@@ -126,21 +126,19 @@ export class DrawerRack {
       });
     }
 
-    // Call button requires doctor password
+    // Call button (staff allowed - logs when they were called)
     this.container.querySelectorAll('[data-action="call"]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const orderId = btn.getAttribute('data-order-id');
-        this.core.promptDoctorAuth('log call date on waiting contact order', () => {
-          const order = this.core.state.allOrders.find(o => o.id === orderId);
-          if (order) {
-            const today = new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
-            order.dateCalled = today;
-            order.status = 'called';
-            order.updatedAt = new Date().toISOString();
-            this.core.notifyChange();
-            this.render();
-          }
-        });
+        const order = this.core.state.allOrders.find(o => o.id === orderId);
+        if (order) {
+          const today = new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+          order.dateCalled = today;
+          order.status = 'called';
+          order.updatedAt = new Date().toISOString();
+          this.core.notifyChange();
+          this.render();
+        }
       });
     });
 

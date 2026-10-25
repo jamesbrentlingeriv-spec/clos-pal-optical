@@ -11,11 +11,12 @@ export class AuthController {
 
     // Accepted user accounts for Pal Optical C.L.O.S.
     this.validUsers = [
-      { username: 'pal', password: 'pal', name: 'Pal Staff', role: 'Front Desk & Dispensing' },
-      { username: 'doctor', password: 'pal', name: 'Dr. Robbins', role: 'Optometrist' },
-      { username: 'optician', password: 'pal', name: 'James / Lab', role: 'Lead Optician' },
-      { username: 'lab', password: 'pal', name: 'Pal Lab', role: 'Optician Technician' },
-      { username: 'admin', password: 'pal', name: 'Administrator', role: 'System Admin' }
+      { username: 'pal', password: 'berry', name: 'Pal Staff', role: 'Front Desk & Dispensing' },
+      { username: 'frontdesk', password: 'berry', name: 'Front Desk', role: 'Front Desk & Dispensing' },
+      { username: 'doctor', password: 'eye_doctor', name: 'Dr. Robbins', role: 'Optometrist' },
+      { username: 'optician', password: 'berry', name: 'James / Lab', role: 'Lead Optician' },
+      { username: 'lab', password: 'berry', name: 'Pal Lab', role: 'Optician Technician' },
+      { username: 'admin', password: 'eye_doctor', name: 'Administrator', role: 'System Admin' }
     ];
   }
 
@@ -65,6 +66,11 @@ export class AuthController {
           </div>
           <h2 class="clos-auth-title">C.L.O.S. <span>PORTAL</span></h2>
           <p class="clos-auth-subtitle">Contact Lens Ordering & Pickup Tracking System</p>
+          <div style="margin-top: 6px;">
+            <span style="font-size: 0.74rem; color: #38bdf8; font-family: 'JetBrains Mono', monospace; background: rgba(2, 132, 199, 0.15); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.25);">
+              🌐 clordersystem.vercel.app
+            </span>
+          </div>
         </div>
 
         <!-- Quick 1-Click Role Presets -->
@@ -99,7 +105,7 @@ export class AuthController {
             <label class="clos-input-label" for="clos-pass-input">Station Password</label>
             <div class="clos-input-wrap">
               <svg class="clos-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <input type="password" id="clos-pass-input" class="clos-auth-input" placeholder="••••••••" autocomplete="current-password" value="pal">
+              <input type="password" id="clos-pass-input" class="clos-auth-input" placeholder="••••••••" autocomplete="current-password" value="berry">
               <button type="button" class="clos-toggle-password" id="btn-toggle-pass" title="Toggle password visibility">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
               </button>
@@ -111,7 +117,7 @@ export class AuthController {
               <input type="checkbox" id="clos-remember-me" checked>
               <span>Keep Station Signed In</span>
             </label>
-            <span class="clos-staff-hint">Default: pal / pal</span>
+            <span class="clos-staff-hint">Front Desk: berry • Doctor: eye_doctor</span>
           </div>
 
           <button type="submit" class="clos-auth-submit-btn" id="clos-submit-btn">
@@ -147,7 +153,11 @@ export class AuthController {
         btn.classList.add('active');
         const preset = btn.getAttribute('data-preset');
         userInput.value = preset;
-        passInput.value = 'pal';
+        if (preset === 'doctor') {
+          passInput.value = 'eye_doctor';
+        } else {
+          passInput.value = 'berry';
+        }
         errorEl.textContent = '';
         passInput.focus();
       });
@@ -204,7 +214,7 @@ export class AuthController {
           this.onLoginSuccess(this.currentUser);
         }, 350);
       } else {
-        this.showError('Invalid credentials. Pal Optical default is: pal / pal');
+        this.showError('Invalid credentials. (Front Desk: berry | Doctor: eye_doctor)');
         passInput.value = '';
         passInput.focus();
       }

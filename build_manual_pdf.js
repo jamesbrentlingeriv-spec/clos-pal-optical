@@ -474,7 +474,7 @@ const htmlContent = `<!DOCTYPE html>
           </tr>
           <tr>
             <td class="lbl">Access URL:</td>
-            <td class="val">http://localhost:5174/ (or local office network)</td>
+            <td class="val">https://clordersystem.vercel.app/</td>
           </tr>
         </table>
       </div>
@@ -584,8 +584,8 @@ const htmlContent = `<!DOCTYPE html>
   <div class="callout callout-green">
     <div class="callout-icon">🔒</div>
     <div class="callout-content">
-      <strong>Doctor Security Rule Summary</strong>
-      Front desk staff can ALWAYS mark <em>how a patient paid</em> and <em>the date they picked up</em> without any password. Modifying prescriptions, patient names, drawer numbers, or deleting orders requires the Doctor's Password (<span class="pill pill-dark">pal</span>).
+      <strong>Role Permissions & Security Summary</strong>
+      Front desk staff can ALWAYS freely update: <strong>(1) The date they pick up</strong>, <strong>(2) Which drawer they were in</strong>, <strong>(3) When they were called</strong>, and <strong>(4) How they paid</strong> without any password! Modifying clinical prescriptions, patient names, dates received from supplier, or deleting orders strictly requires the Doctor's Password (<span class="pill pill-dark">eye_doctor</span>). Front desk login password is <span class="pill pill-dark">berry</span>.
     </div>
   </div>
 
@@ -662,10 +662,12 @@ const htmlContent = `<!DOCTYPE html>
   <div class="step-card">
     <div class="step-header">
       <div class="step-num">🌐</div>
-      <div class="step-title">Option B: In Any Web Browser</div>
+      <div class="step-title">Option B: Official Cloud Web Access</div>
     </div>
     <p class="step-desc">
-      Type <strong>http://localhost:5174/</strong> into Chrome, Edge, or Firefox. Other computers on the office Wi-Fi can connect using the office network IP address (e.g. <code>http://192.168.4.51:5174/</code>).
+      Open Chrome, Edge, Safari, or Firefox and go to the official application address:<br>
+      <strong style="color: #0284c7; font-size: 1.05rem;"><a href="https://clordersystem.vercel.app/" style="color: #0284c7; text-decoration: underline;">https://clordersystem.vercel.app/</a></strong><br>
+      This is the exclusive, secure cloud URL configured for Pal Optical. Any computer, iPad, or tablet with internet access can use C.L.O.S. through this link.
     </p>
   </div>
 
@@ -694,21 +696,21 @@ const htmlContent = `<!DOCTYPE html>
     <tbody>
       <tr>
         <td><strong>👩‍💼 Front Desk</strong></td>
-        <td><code>pal</code></td>
-        <td><code>pal</code></td>
-        <td>Front reception desk. Can enter daily orders, log patient pickups, and update payment status freely.</td>
+        <td><code>pal</code> (or <code>frontdesk</code>)</td>
+        <td><strong style="color: #047857;"><code>berry</code></strong></td>
+        <td>Front reception desk. Can enter daily orders, update drawer #, log calls, record pickups, and change payment status freely.</td>
       </tr>
       <tr>
         <td><strong>🩺 Dr. Robbins</strong></td>
         <td><code>doctor</code></td>
-        <td><code>pal</code></td>
-        <td>Dr. Robbins' examination room. Full access to write prescriptions, order lenses, and edit all records.</td>
+        <td><strong style="color: #b91c1c;"><code>eye_doctor</code></strong></td>
+        <td>Dr. Robbins' examination room. Full clinical authority to write prescriptions, edit orders, delete records, and verify date received.</td>
       </tr>
       <tr>
         <td><strong>🔬 Optician Lab</strong></td>
         <td><code>optician</code></td>
-        <td><code>pal</code></td>
-        <td>Optical lab and dispensing area. Access to order history and drawer management.</td>
+        <td><strong style="color: #047857;"><code>berry</code></strong></td>
+        <td>Optical lab and dispensing area. Access to order history, drawer management, and patient checkout.</td>
       </tr>
     </tbody>
   </table>
@@ -998,20 +1000,22 @@ const htmlContent = `<!DOCTYPE html>
   <div class="callout callout-green">
     <div class="callout-icon">🟢</div>
     <div class="callout-content">
-      <strong>1. WHAT FRONT DESK STAFF CAN DO FREELY (NO PASSWORD):</strong>
-      <br>• <strong>How They Paid:</strong> Type directly into the <strong>Pd?</strong> column or change payment method anytime.
-      <br>• <strong>Date They Picked Up:</strong> Click <strong>✓ Done</strong> on the sheet or <strong>✅ Picked Up</strong> in the drawer rack to check out the patient and record the pickup date.
+      <strong>1. WHAT FRONT DESK STAFF CAN DO FREELY (NO PASSWORD REQUIRED):</strong>
+      <br>• <strong>The Date They Pick Up:</strong> Click <strong>✓ Done</strong> on the sheet or <strong>✅ Picked Up</strong> in the drawer rack to complete checkout and record pickup date.
+      <br>• <strong>Which Drawer They Were In:</strong> Type or change the drawer number in the <strong>Drawer #</strong> column anytime.
+      <br>• <strong>When They Were Called:</strong> Click <strong>📞 Call</strong> (sets today's date), click <strong>LVM</strong> (sets left voicemail), or type directly into <strong>Date Called</strong>.
+      <br>• <strong>How They Paid:</strong> Type directly into the <strong>Pd?</strong> column or choose a payment method during checkout (e.g. Paid, Cash, Card, Check, VSP).
     </div>
   </div>
 
   <div class="callout callout-red">
     <div class="callout-icon">🔒</div>
     <div class="callout-content">
-      <strong>2. WHAT REQUIRES THE DOCTOR'S PASSWORD (<code>pal</code>):</strong>
-      <br>• Clicking <strong>✏️ Edit Order</strong> to change patient name, prescriptions, brands, quantities, or notes.
-      <br>• Clicking <strong>🗑️ Delete Order</strong> to permanently delete an order from the database.
-      <br>• Manually changing arrival dates, assigning drawers, or modifying phone call logs.
-      <br>• Clicking <strong>Clear All Orders</strong> to empty the waiting sheet.
+      <strong>2. WHAT REQUIRES THE DOCTOR'S PASSWORD (<code>eye_doctor</code>):</strong>
+      <br>• <strong>Clinical Prescription & Order Data:</strong> Clicking <strong>✏️ Edit Order</strong> to modify patient name, phone, DOB, contact lens brand, Right (OD) Rx, Left (OS) Rx, box quantities, or amount due.
+      <br>• <strong>Date Received:</strong> Changing package arrival dates from the supplier (via the Date Received cell or 📅 button).
+      <br>• <strong>Order Deletion:</strong> Clicking <strong>🗑️ Delete Order</strong> to permanently erase an order.
+      <br>• <strong>Clear Waiting Sheet:</strong> Clicking <strong>Clear All Orders</strong> to empty the 50-row sheet.
     </div>
   </div>
 
@@ -1108,12 +1112,12 @@ const htmlContent = `<!DOCTYPE html>
       </tr>
       <tr>
         <td><strong>Patient claims phone number is wrong</strong></td>
-        <td>Click <code>✏️ Edit</code>, enter Doctor's Password (<code>pal</code>), and update phone.</td>
+        <td>Click <code>✏️ Edit</code>, enter Doctor's Password (<code>eye_doctor</code>), and update phone.</td>
         <td><span class="pill pill-red">YES (Doctor Pass)</span></td>
       </tr>
       <tr>
         <td><strong>Doctor cancelled order; need to delete</strong></td>
-        <td>Click <code>🗑️ Delete</code>, enter Doctor's Password (<code>pal</code>), and confirm deletion.</td>
+        <td>Click <code>🗑️ Delete</code>, enter Doctor's Password (<code>eye_doctor</code>), and confirm deletion.</td>
         <td><span class="pill pill-red">YES (Doctor Pass)</span></td>
       </tr>
     </tbody>
@@ -1150,10 +1154,10 @@ const htmlContent = `<!DOCTYPE html>
   <div class="step-card">
     <div class="step-header">
       <div class="step-num">📞</div>
-      <div class="step-title">"🔒 Log Called" (Requires Doctor Password)</div>
+      <div class="step-title">"📞 Log Called" (Staff Allowed)</div>
     </div>
     <p class="step-desc">
-      Clicking <strong>🔒 Log Called</strong> prompts for the Doctor's Password (<span class="pill pill-dark">pal</span>) and records today's date in the phone call log.
+      Clicking <strong>📞 Log Called</strong> records today's date in the phone call log instantly without needing a password.
     </p>
   </div>
 
@@ -1293,7 +1297,7 @@ const htmlContent = `<!DOCTYPE html>
       <div class="step-title">"I made a typo in a patient's name on the Waiting Sheet. How do I fix it?"</div>
     </div>
     <p class="step-desc">
-      Click the <strong>✏️ Edit</strong> button on their row. The system will prompt for the Doctor's Password (<span class="pill pill-dark">pal</span>). Type <code>pal</code>, click Authorize, and the full Order Modal will open where you can fix the name, phone number, prescription, or any other field. Click <strong>💾 Save Order Changes</strong> when done.
+      Click the <strong>✏️ Edit</strong> button on their row. The system will prompt for the Doctor's Password (<span class="pill pill-dark">eye_doctor</span>). Type <code>eye_doctor</code>, click Authorize, and the full Order Modal will open where you can fix the name, phone number, prescription, or any other field. Click <strong>💾 Save Order Changes</strong> when done.
     </p>
   </div>
 
@@ -1333,7 +1337,7 @@ const htmlContent = `<!DOCTYPE html>
       <div class="step-title">"What is the Doctor's Password if the doctor is not at the desk?"</div>
     </div>
     <p class="step-desc">
-      The Doctor's Security Password is <code>pal</code> (all lowercase, no spaces).
+      The Doctor's Security Password is <code>eye_doctor</code> (all lowercase, with an underscore). Front desk staff password is <code>berry</code>.
     </p>
   </div>
 
@@ -1373,13 +1377,13 @@ const htmlContent = `<!DOCTYPE html>
     </div>
 
     <div class="cheat-box" style="border-left: 4px solid #f59e0b;">
-      <h4>🔒 When Doctor Password is Needed</h4>
+      <h4>🔒 Passwords & Security Rules</h4>
       <ul>
-        <li>• Clicking <strong>✏️ Edit Order</strong> to modify name, Rx, or brand.</li>
-        <li>• Clicking <strong>🗑️ Delete Order</strong> to erase a waiting order.</li>
-        <li>• Changing <strong>Date Received</strong> or <strong>Drawer #</strong> on table.</li>
-        <li>• Clicking <strong>Clear All Orders</strong> on waiting sheet.</li>
-        <li>• <strong>Doctor Password is:</strong> <code style="font-size: 10pt; font-weight: bold; background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">pal</code></li>
+        <li>• <strong>Staff Allowed (NO password):</strong> Date Picked Up, Drawer #, When Called (Call/LVM), How Paid.</li>
+        <li>• <strong>Doctor Password Required:</strong> Name/Rx/Brand/Qty edit (✏️), Date Received (📅), Delete (🗑️), Clear Sheet.</li>
+        <li>• <strong>Doctor Password:</strong> <code style="font-size: 10pt; font-weight: bold; background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px;">eye_doctor</code></li>
+        <li>• <strong>Front Desk Password:</strong> <code style="font-size: 10pt; font-weight: bold; background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 4px;">berry</code></li>
+        <li>• <strong>Official URL:</strong> <code style="font-size: 9pt;">https://clordersystem.vercel.app/</code></li>
       </ul>
     </div>
 

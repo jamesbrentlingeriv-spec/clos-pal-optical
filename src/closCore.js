@@ -1741,6 +1741,16 @@ export class ContactLensOrderForm {
 
             </button>
 
+            <button type="button" class="clo-tab-btn ${this.state.activeTab === 'manual' ? 'active' : ''}" data-tab="manual" id="tab-btn-manual">
+
+              <span class="clo-tab-icon">📖</span>
+
+              <span class="clo-tab-text">Web Manual (18 Pages)</span>
+
+              <span class="clo-tab-badge badge-blue">Full Guide</span>
+
+            </button>
+
           </div>
 
           <!-- Multi-Computer Cloud Sync Indicator -->

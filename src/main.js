@@ -312,12 +312,17 @@ class ClosApplication {
       });
     }
 
-    // Open Web Manual & PDF Viewer
+    // Open Web Manual Tab directly in app (no new tab, no redirect)
     const manualBtn = document.getElementById('btn-open-manual');
     if (manualBtn) {
       manualBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        this.openManualViewer();
+        this.hideDrawerRack();
+        if (this.closCore && typeof this.closCore.switchTab === 'function') {
+          this.closCore.switchTab('manual');
+        } else {
+          this.openManualViewer();
+        }
       });
     }
 

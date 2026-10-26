@@ -3739,7 +3739,7 @@ export class ContactLensOrderForm {
         // 1. How they paid ('paid')
         // 2. Which drawer they were in ('drawer')
         // 3. When they were called ('dateCalled')
-        const staffAllowed = ['paid', 'drawer', 'dateCalled'];
+        const staffAllowed = ['paid', 'drawer', 'dateCalled', 'dateReceived'];
         if (staffAllowed.includes(field)) {
           this.updatePickupField(orderId, field, e.target.value);
         } else {
@@ -3763,7 +3763,7 @@ export class ContactLensOrderForm {
 
         const id = btn.getAttribute('data-order-id');
 
-        this.promptDoctorAuth('log date received', () => this.markOrderReceivedToday(id));
+        this.markOrderReceivedToday(id);
 
       });
 

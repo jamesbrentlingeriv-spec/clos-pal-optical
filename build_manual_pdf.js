@@ -585,7 +585,7 @@ const htmlContent = `<!DOCTYPE html>
     <div class="callout-icon">🔒</div>
     <div class="callout-content">
       <strong>Role Permissions & Security Summary</strong>
-      Front desk staff can ALWAYS freely update: <strong>(1) The date they pick up</strong>, <strong>(2) Which drawer they were in</strong>, <strong>(3) When they were called</strong>, and <strong>(4) How they paid</strong> without any password! Modifying clinical prescriptions, patient names, dates received from supplier, or deleting orders strictly requires the Doctor's Password (<span class="pill pill-dark">eye_doctor</span>). Front desk login password is <span class="pill pill-dark">berry</span>.
+      Front desk staff can ALWAYS freely update: <strong>(1) Date received from distributor (📅)</strong>, <strong>(2) Drawer number (1–12)</strong>, <strong>(3) Date called / voicemail (📞/LVM)</strong>, <strong>(4) Date picked up (✓ Done)</strong>, and <strong>(5) How they paid (Pd?)</strong> without needing any password! Only modifying clinical prescriptions, patient names, box quantities, or deleting orders strictly requires the Doctor's Password (<span class="pill pill-dark">eye_doctor</span>). Front desk login password is <span class="pill pill-dark">berry</span>.
     </div>
   </div>
 
@@ -698,13 +698,13 @@ const htmlContent = `<!DOCTYPE html>
         <td><strong>👩‍💼 Front Desk</strong></td>
         <td><code>pal</code> (or <code>frontdesk</code>)</td>
         <td><strong style="color: #047857;"><code>berry</code></strong></td>
-        <td>Front reception desk. Can enter daily orders, update drawer #, log calls, record pickups, and change payment status freely.</td>
+        <td>Front reception desk. Can enter daily orders, log packages received, assign drawers, log phone calls, complete patient pickups, and update payment status freely.</td>
       </tr>
       <tr>
         <td><strong>🩺 Dr. Robbins</strong></td>
         <td><code>doctor</code></td>
         <td><strong style="color: #b91c1c;"><code>eye_doctor</code></strong></td>
-        <td>Dr. Robbins' examination room. Full clinical authority to write prescriptions, edit orders, delete records, and verify date received.</td>
+        <td>Dr. Robbins' examination room. Full clinical authority to write prescriptions, edit patient & Rx parameters, and delete records.</td>
       </tr>
       <tr>
         <td><strong>🔬 Optician Lab</strong></td>
@@ -970,20 +970,20 @@ const htmlContent = `<!DOCTYPE html>
       <tr>
         <td>11</td>
         <td><strong>Date Received</strong></td>
-        <td>Date distributor delivered the package to office.</td>
-        <td><span class="pill pill-red">🔒 Doctor Only</span></td>
+        <td>Date distributor delivered package to office (type date or click 📅).</td>
+        <td><span class="pill pill-green">🟢 Staff Unlocked</span></td>
       </tr>
       <tr>
         <td>12</td>
         <td><strong>Drawer #</strong></td>
-        <td>Dispensing drawer number (Drawers 1–12).</td>
-        <td><span class="pill pill-red">🔒 Doctor Only</span></td>
+        <td>Dispensing drawer number (Drawers 1–12; type drawer number anytime).</td>
+        <td><span class="pill pill-green">🟢 Staff Unlocked</span></td>
       </tr>
       <tr>
         <td>13</td>
         <td><strong>Date Called</strong></td>
-        <td>Date staff called patient or left voicemail.</td>
-        <td><span class="pill pill-red">🔒 Doctor Only</span></td>
+        <td>Date staff called patient or left voicemail (type date or click 📞/LVM).</td>
+        <td><span class="pill pill-green">🟢 Staff Unlocked</span></td>
       </tr>
       <tr>
         <td>14</td>
@@ -1000,11 +1000,12 @@ const htmlContent = `<!DOCTYPE html>
   <div class="callout callout-green">
     <div class="callout-icon">🟢</div>
     <div class="callout-content">
-      <strong>1. WHAT FRONT DESK STAFF CAN DO FREELY (NO PASSWORD REQUIRED):</strong>
-      <br>• <strong>The Date They Pick Up:</strong> Click <strong>✓ Done</strong> on the sheet or <strong>✅ Picked Up</strong> in the drawer rack to complete checkout and record pickup date.
-      <br>• <strong>Which Drawer They Were In:</strong> Type or change the drawer number in the <strong>Drawer #</strong> column anytime.
-      <br>• <strong>When They Were Called:</strong> Click <strong>📞 Call</strong> (sets today's date), click <strong>LVM</strong> (sets left voicemail), or type directly into <strong>Date Called</strong>.
-      <br>• <strong>How They Paid:</strong> Type directly into the <strong>Pd?</strong> column or choose a payment method during checkout (e.g. Paid, Cash, Card, Check, VSP).
+      <strong>1. WHAT FRONT DESK STAFF CAN DO FREELY (STAFF UNLOCKED — NO PASSWORD):</strong>
+      <br>• <strong>Date Received:</strong> Type package delivery date into the <strong>Date Received</strong> cell or click <strong>📅</strong> to stamp today's date when shipments arrive.
+      <br>• <strong>Drawer Number:</strong> Type or update the dispensing drawer number in the <strong>Drawer #</strong> column anytime to organize physical lenses.
+      <br>• <strong>Date Called:</strong> Click <strong>📞 Call</strong> (sets today's date), click <strong>LVM</strong> (sets left voicemail), or type directly into <strong>Date Called</strong>.
+      <br>• <strong>Date Picked Up:</strong> Click <strong>✓ Done</strong> on the sheet or <strong>✅ Picked Up</strong> in the drawer rack to complete patient checkout and record pickup date.
+      <br>• <strong>How They Paid:</strong> Type directly into the <strong>Pd?</strong> column or select payment method during checkout (e.g. Paid, Cash, Card, Check, VSP).
     </div>
   </div>
 
@@ -1012,9 +1013,8 @@ const htmlContent = `<!DOCTYPE html>
     <div class="callout-icon">🔒</div>
     <div class="callout-content">
       <strong>2. WHAT REQUIRES THE DOCTOR'S PASSWORD (<code>eye_doctor</code>):</strong>
-      <br>• <strong>Clinical Prescription & Order Data:</strong> Clicking <strong>✏️ Edit Order</strong> to modify patient name, phone, DOB, contact lens brand, Right (OD) Rx, Left (OS) Rx, box quantities, or amount due.
-      <br>• <strong>Date Received:</strong> Changing package arrival dates from the supplier (via the Date Received cell or 📅 button).
-      <br>• <strong>Order Deletion:</strong> Clicking <strong>🗑️ Delete Order</strong> to permanently erase an order.
+      <br>• <strong>Clinical Prescriptions & Patient Information:</strong> Clicking <strong>✏️ Edit Order</strong> to modify patient name, phone, DOB, contact lens brand, Right (OD) Rx, Left (OS) Rx, box quantities, or amount due.
+      <br>• <strong>Order Deletion:</strong> Clicking <strong>🗑️ Delete Order</strong> to permanently remove an order from the database.
       <br>• <strong>Clear Waiting Sheet:</strong> Clicking <strong>Clear All Orders</strong> to empty the 50-row sheet.
     </div>
   </div>
@@ -1379,8 +1379,8 @@ const htmlContent = `<!DOCTYPE html>
     <div class="cheat-box" style="border-left: 4px solid #f59e0b;">
       <h4>🔒 Passwords & Security Rules</h4>
       <ul>
-        <li>• <strong>Staff Allowed (NO password):</strong> Date Picked Up, Drawer #, When Called (Call/LVM), How Paid.</li>
-        <li>• <strong>Doctor Password Required:</strong> Name/Rx/Brand/Qty edit (✏️), Date Received (📅), Delete (🗑️), Clear Sheet.</li>
+        <li>• <strong>Staff Unlocked (NO password):</strong> Date Received (📅), Drawer #, When Called (📞/LVM), Date Picked Up (✓ Done), How Paid.</li>
+        <li>• <strong>Doctor Password Required:</strong> Name/Rx/Brand/Qty edit (✏️), Delete Order (🗑️), Clear Waiting Sheet.</li>
         <li>• <strong>Doctor Password:</strong> <code style="font-size: 10pt; font-weight: bold; background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px;">eye_doctor</code></li>
         <li>• <strong>Front Desk Password:</strong> <code style="font-size: 10pt; font-weight: bold; background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 4px;">berry</code></li>
         <li>• <strong>Official URL:</strong> <code style="font-size: 9pt;">https://clordersystem.vercel.app/</code></li>

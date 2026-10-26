@@ -1247,13 +1247,24 @@ const htmlContent = `<!DOCTYPE html>
   <!-- ==================================================================== -->
   <h2>Chapter 10: Multi-Computer Sync, Backups & FAQ</h2>
 
-  <h3>How Office Synchronization Works</h3>
-  <p>C.L.O.S. uses a hybrid synchronization engine designed for doctor offices:</p>
+  <h3>How Multi-Computer Cloud Synchronization Works (Option 1)</h3>
+  <p>C.L.O.S. is engineered with a multi-station synchronization engine that keeps Dr. Robbins' examination room, the front reception desk, and optical lab workstations in continuous lockstep:</p>
   <ul>
-    <li><strong>Instant Cross-Tab Sync:</strong> If two browser tabs or windows are open on the same computer, changes sync across them in milliseconds.</li>
-    <li><strong>Multi-Computer LAN Sync:</strong> When the background server is active, computers in Dr. Robbins' room and the front desk automatically sync over the local network every 10 seconds.</li>
-    <li><strong>Sync Status Dot:</strong> The green pulse dot in the navigation bar indicates when your screen is synchronized with the office network.</li>
+    <li><strong>Real-Time Cloud Push:</strong> When Front Desk inputs orders on the 16-row pad, or when Dr. Robbins approves an order with clinical Rx parameters, the changes stream live to every connected workstation in under one second.</li>
+    <li><strong>Cross-Station Independence:</strong> The doctor can be working in the exam room on an iPad or PC while reception checks in patients at the front desk simultaneously. Neither station overwrites the other.</li>
+    <li><strong>Offline Resiliency:</strong> Because C.L.O.S. is an offline-capable Progressive Web App, every workstation automatically keeps a local copy of all records in browser memory (<code>localStorage</code>). If the office internet hiccups, staff can continue typing and dispensing lenses without interruption. All queued changes sync to the cloud the moment connectivity returns.</li>
+    <li><strong>Interactive Cloud Sync Dialog:</strong> Clicking the <strong>☁️ Cloud Synced</strong> badge in the top navigation bar opens the synchronization dashboard, showing live connection health, active orders, a <em>🔄 Sync Now</em> button, and a 1-click <em>📋 Copy Doctor Link</em>.</li>
   </ul>
+
+  <div class="callout callout-blue">
+    <div class="callout-icon">💡</div>
+    <div class="callout-content">
+      <strong>Connecting Dr. Robbins' Computer in 3 Steps:</strong><br>
+      1. Open Chrome, Edge, or Safari on the doctor's computer and go to: <strong><a href="https://clordersystem.vercel.app/" style="color: #0284c7; text-decoration: underline;">https://clordersystem.vercel.app/</a></strong><br>
+      2. Log in using username <strong><code>doctor</code></strong> and password <strong><code>eye_doctor</code></strong>.<br>
+      3. Click the <strong>🩺 Doctor's Queue</strong> tab. Orders sent by the front desk will appear automatically!
+    </div>
+  </div>
 
   <h3>Data Backups & Excel Export</h3>
   <p>At the top right of the executive header, three powerful data tools are available:</p>

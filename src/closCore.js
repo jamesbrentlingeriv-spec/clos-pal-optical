@@ -1,3 +1,4 @@
+import { CloudSyncManager } from './cloudSync.js';
 /* Pal Optical Forms Web App - Contact Lens Order & Pickup Management System
 
  *
@@ -25,6 +26,7 @@ export class ContactLensOrderForm {
     this.onStateChange = onStateChange;
 
     this.options = options || {};
+    this.cloudSync = new CloudSyncManager({ core: this });
 
     const todayStr = new Date().toLocaleDateString('en-US', {
 
@@ -447,151 +449,231 @@ export class ContactLensOrderForm {
   }
 
   async fetchServerData(silent = false) {
-
-    try {
-
-      const res = await fetch('/api/contact-lens-orders');
-
-      if (res.ok) {
-
-        const json = await res.json();
-
-        if (json && json.success && json.data) {
-
-          const remoteData = json.data;
-
-          let changed = false;
-
-          // Merge allOrders if remote has newer or more orders
-
-          if (Array.isArray(remoteData.allOrders) && remoteData.allOrders.length) {
-
-            const remoteMap = new Map(remoteData.allOrders.map(o => [o.id, o]));
-
-            const localMap = new Map(this.state.allOrders.map(o => [o.id, o]));
-
-            remoteMap.forEach((remOrder, id) => {
-
-              const locOrder = localMap.get(id);
-
-              if (!locOrder) {
-
-                localMap.set(id, remOrder);
-
-                changed = true;
-
-              } else if (remOrder.updatedAt && (!locOrder.updatedAt || remOrder.updatedAt > locOrder.updatedAt)) {
-
-                localMap.set(id, { ...locOrder, ...remOrder });
-
-                changed = true;
-
-              }
-
-            });
-
-            if (changed) {
-
-              this.state.allOrders = Array.from(localMap.values());
-
-            }
-
-          }
-
-          // Merge daily pad rows
-
-          if (Array.isArray(remoteData.rows) && remoteData.rows.length) {
-
-            remoteData.rows.forEach((remRow, idx) => {
-
-              if (idx < this.state.rows.length) {
-
-                const locRow = this.state.rows[idx];
-
-                if ((remRow.name || '').trim() && !(locRow.name || '').trim()) {
-
-                  this.state.rows[idx] = { ...locRow, ...remRow };
-
-                  changed = true;
-
-                }
-
-              }
-
-            });
-
-          }
-
-          if (changed) {
-
-            this.state.lastSyncedAt = new Date().toLocaleTimeString();
-
-            this.state.syncStatus = 'synced';
-
-            this.render();
-
-            this.bindEvents();
-
-          }
-
-        }
-
-      }
-
-    } catch (e) {
-
-      if (!silent) console.warn('Fetch server orders notice:', e);
-
+    if (this.cloudSync) {
+      await this.cloudSync.pullCloudData(silent);
     }
-
   }
 
   async pushServerData() {
-
-    try {
-
-      this.state.syncStatus = 'syncing';
-
-      const payload = {
-
+    if (this.cloudSync) {
+      await this.cloudSync.pushCloudData({
         batchDate: this.state.batchDate,
-
         rows: this.state.rows,
-
-        allOrders: this.state.allOrders,
-
-        updatedAt: new Date().toISOString()
-
-      };
-
-      const res = await fetch('/api/contact-lens-orders', {
-
-        method: 'POST',
-
-        headers: { 'Content-Type': 'application/json' },
-
-        body: JSON.stringify(payload)
-
+        allOrders: this.state.allOrders
       });
+    }
+  }
 
-      if (res.ok) {
 
-        this.state.syncStatus = 'synced';
-
-        this.state.lastSyncedAt = new Date().toLocaleTimeString();
-
+  updateSyncUI(status, lastSyncedAt) {
+    this.state.syncStatus = status;
+    if (lastSyncedAt) this.state.lastSyncedAt = lastSyncedAt;
+    if (!this.container) return;
+    const indicator = this.container.querySelector('.clo-sync-indicator');
+    if (!indicator) return;
+    const dot = indicator.querySelector('.clo-sync-dot');
+    const label = indicator.querySelector('.clo-sync-label');
+    if (dot) {
+      dot.className = `clo-sync-dot ${status === 'connected' ? 'dot-green dot-pulse' : (status === 'syncing' ? 'dot-blue dot-pulse' : (status === 'offline' ? 'dot-red' : 'dot-amber'))}`;
+    }
+    if (label) {
+      if (status === 'connected') {
+        label.textContent = `☁️ Cloud Synced ${this.state.lastSyncedAt ? this.state.lastSyncedAt : ''}`.trim();
+      } else if (status === 'syncing') {
+        label.textContent = '🔄 Syncing Cloud...';
+      } else if (status === 'offline') {
+        label.textContent = '💾 Offline (Saved Locally)';
       } else {
-
-        this.state.syncStatus = 'idle';
-
+        label.textContent = '☁️ Multi-Station Synced';
       }
+    }
+  }
 
-    } catch (e) {
-
-      this.state.syncStatus = 'idle';
-
+  openCloudSyncModal() {
+    const modalId = 'clo-cloud-sync-modal';
+    let modalEl = document.getElementById(modalId);
+    if (!modalEl) {
+      modalEl = document.createElement('div');
+      modalEl.id = modalId;
+      document.body.appendChild(modalEl);
     }
 
+    const currentEndpoint = this.cloudSync ? this.cloudSync.cloudEndpoint : '';
+    const lastTime = this.cloudSync ? this.cloudSync.lastSyncedAt || this.state.lastSyncedAt || 'Just now' : 'Just now';
+    const waitingCount = this.getWaitingOrders().length;
+    const padCount = this.state.rows.filter(r => (r.name || '').trim()).length;
+    const totalCount = this.state.allOrders.length;
+    const currentStation = window.closApp?.currentUser?.title || 'Front Desk Station';
+
+    modalEl.innerHTML = `
+      <div class="clo-modal-backdrop" style="z-index: 10000;">
+        <div class="clo-modal-card" style="max-width: 580px; border: 2px solid #0284c7; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+          <div class="clo-modal-header" style="background: linear-gradient(135deg, #0f172a, #0369a1); color: #ffffff; padding: 18px 24px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.8rem;">☁️</span>
+              <div>
+                <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #ffffff;">Multi-Computer Cloud Synchronization</h3>
+                <span style="font-size: 0.78rem; color: #bae6fd;">Real-Time Sync: Front Desk ⇄ Doctor's Exam Room</span>
+              </div>
+            </div>
+            <button type="button" class="clo-modal-close-btn" id="btn-close-sync-modal" style="color: #cbd5e1; font-size: 1.3rem;">✕</button>
+          </div>
+
+          <div class="clo-modal-body" style="padding: 24px; max-height: 80vh; overflow-y: auto;">
+            <!-- Live Status Banner -->
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1px solid #86efac; padding: 14px 18px; border-radius: 12px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="clo-sync-dot dot-green dot-pulse" style="width: 12px; height: 12px;"></span>
+                <div>
+                  <div style="font-weight: 800; color: #166534; font-size: 0.95rem;">Real-Time Cloud Connected</div>
+                  <div style="font-size: 0.78rem; color: #15803d;">Station: <strong>${this.escapeHtml(currentStation)}</strong> • Last Synced: <strong>${this.escapeHtml(lastTime)}</strong></div>
+                </div>
+              </div>
+              <button type="button" class="clo-btn clo-btn-primary" id="btn-force-sync-now" style="font-size: 0.8rem; padding: 6px 14px; background: #0284c7;">
+                🔄 Sync Now
+              </button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px;">
+              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-align: center;">
+                <div style="font-size: 1.35rem; font-weight: 900; color: #0284c7;">${padCount}</div>
+                <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Pad Orders</div>
+              </div>
+              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-align: center;">
+                <div style="font-size: 1.35rem; font-weight: 900; color: #10b981;">${waitingCount}</div>
+                <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Waiting Pickups</div>
+              </div>
+              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-align: center;">
+                <div style="font-size: 1.35rem; font-weight: 900; color: #6366f1;">${totalCount}</div>
+                <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Total in Database</div>
+              </div>
+            </div>
+
+            <!-- Doctor's Computer Quick Connect -->
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 0.88rem; font-weight: 800; color: #1e40af;">🩺 Connect Dr. Robbins' Computer</span>
+                <span class="pill pill-blue" style="font-size: 0.7rem;">Doctor Link</span>
+              </div>
+              <p style="font-size: 0.82rem; color: #1e3a8a; margin: 0 0 10px 0; line-height: 1.4;">
+                Open this URL in Chrome, Edge, or Safari on the doctor's computer. Log in as <strong>doctor</strong> with password <strong>eye_doctor</strong>:
+              </p>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="text" id="sync-share-url" readonly value="https://clordersystem.vercel.app/" style="flex: 1; padding: 8px 12px; font-size: 0.85rem; font-family: monospace; font-weight: 700; border: 1px solid #93c5fd; border-radius: 6px; background: #ffffff; color: #0f172a;">
+                <button type="button" class="clo-btn clo-btn-secondary" id="btn-copy-sync-url" style="padding: 8px 14px; font-size: 0.82rem; white-space: nowrap;">
+                  📋 Copy Link
+                </button>
+              </div>
+              <div id="copy-success-msg" style="color: #059669; font-size: 0.78rem; font-weight: 700; margin-top: 6px; display: none;">✓ Link copied to clipboard!</div>
+            </div>
+
+            <!-- Cloud Database Endpoint -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size: 0.85rem; font-weight: 700; color: #0f172a;">Cloud Database Channel (Firebase Realtime / REST)</span>
+                <span style="font-size: 0.72rem; color: #64748b;">Live Channel</span>
+              </div>
+              <input type="text" id="sync-endpoint-input" value="${this.escapeAttr(currentEndpoint)}" placeholder="https://your-project-default-rtdb.firebaseio.com/clos.json" style="width: 100%; padding: 8px 12px; font-size: 0.8rem; font-family: monospace; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                <button type="button" class="clo-btn clo-btn-ghost" id="btn-reset-sync-endpoint" style="font-size: 0.78rem; padding: 6px 10px;">
+                  Reset to Default
+                </button>
+                <div style="display: flex; gap: 8px;">
+                  <button type="button" class="clo-btn clo-btn-secondary" id="btn-test-sync-endpoint" style="font-size: 0.78rem; padding: 6px 14px;">
+                    Test Connection
+                  </button>
+                  <button type="button" class="clo-btn clo-btn-primary" id="btn-save-sync-endpoint" style="font-size: 0.78rem; padding: 6px 16px; background: #0284c7;">
+                    Save & Reconnect
+                  </button>
+                </div>
+              </div>
+              <div id="sync-test-result" style="font-size: 0.78rem; margin-top: 8px; min-height: 18px; font-weight: 600;"></div>
+            </div>
+          </div>
+
+          <div class="clo-modal-footer" style="padding: 14px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+            <button type="button" class="clo-btn clo-btn-ghost" id="btn-dismiss-sync-modal">Close</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const closeBtn = modalEl.querySelector('#btn-close-sync-modal');
+    const dismissBtn = modalEl.querySelector('#btn-dismiss-sync-modal');
+    const forceSyncBtn = modalEl.querySelector('#btn-force-sync-now');
+    const copyUrlBtn = modalEl.querySelector('#btn-copy-sync-url');
+    const copySuccessMsg = modalEl.querySelector('#copy-success-msg');
+    const endpointInput = modalEl.querySelector('#sync-endpoint-input');
+    const testBtn = modalEl.querySelector('#btn-test-sync-endpoint');
+    const saveBtn = modalEl.querySelector('#btn-save-sync-endpoint');
+    const resetBtn = modalEl.querySelector('#btn-reset-sync-endpoint');
+    const testResult = modalEl.querySelector('#sync-test-result');
+
+    const closeModal = () => modalEl.remove();
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (dismissBtn) dismissBtn.addEventListener('click', closeModal);
+
+    if (forceSyncBtn) {
+      forceSyncBtn.addEventListener('click', async () => {
+        forceSyncBtn.textContent = '🔄 Syncing...';
+        if (this.cloudSync) {
+          await this.cloudSync.syncBothWays();
+        }
+        forceSyncBtn.textContent = '✓ Synced!';
+        setTimeout(() => { forceSyncBtn.textContent = '🔄 Sync Now'; }, 1500);
+      });
+    }
+
+    if (copyUrlBtn) {
+      copyUrlBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText('https://clordersystem.vercel.app/').then(() => {
+          if (copySuccessMsg) {
+            copySuccessMsg.style.display = 'block';
+            setTimeout(() => { copySuccessMsg.style.display = 'none'; }, 3000);
+          }
+        });
+      });
+    }
+
+    if (testBtn) {
+      testBtn.addEventListener('click', async () => {
+        testResult.textContent = 'Testing connection...';
+        testResult.style.color = '#0284c7';
+        if (this.cloudSync) {
+          const res = await this.cloudSync.testConnection(endpointInput.value);
+          if (res.ok) {
+            testResult.textContent = '🟢 Success! Cloud endpoint is online and responsive.';
+            testResult.style.color = '#16a34a';
+          } else {
+            testResult.textContent = `❌ Test failed: ${res.error}`;
+            testResult.style.color = '#dc2626';
+          }
+        }
+      });
+    }
+
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => {
+        if (this.cloudSync) {
+          this.cloudSync.saveEndpoint(endpointInput.value);
+          testResult.textContent = '✓ Saved! Reconnected to cloud channel.';
+          testResult.style.color = '#16a34a';
+          setTimeout(() => closeModal(), 1200);
+        }
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (this.cloudSync) {
+          endpointInput.value = this.cloudSync.defaultEndpoint;
+          this.cloudSync.saveEndpoint(this.cloudSync.defaultEndpoint);
+          testResult.textContent = 'Reset to default cloud endpoint.';
+          testResult.style.color = '#0284c7';
+        }
+      });
+    }
   }
 
   handleRemoteSync(payload) {

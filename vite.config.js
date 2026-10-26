@@ -6,5 +6,8 @@ export default defineConfig({
     port: 5174,
     strictPort: false,
     open: true
+  },
+  build: {
+    emptyOutDir: false
   }
 });

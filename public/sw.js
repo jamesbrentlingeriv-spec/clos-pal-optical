@@ -1,5 +1,5 @@
 // C.L.O.S. PWA Service Worker (v3)
-const CACHE_NAME = 'clos-pwa-v3';
+const CACHE_NAME = 'clos-pwa-v4';
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
@@ -12,8 +12,6 @@ const PRECACHE_ASSETS = [
   '/apple-touch-icon.png',
   '/android-chrome-192x192.png',
   '/android-chrome-512x512.png',
-  '/manual.html',
-  '/CLOS_Operations_Manual.pdf'
 ];
 
 self.addEventListener('install', (event) => {

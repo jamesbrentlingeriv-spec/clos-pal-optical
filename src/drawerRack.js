@@ -13,9 +13,9 @@ export class DrawerRack {
 
     const waitingOrders = this.core.getWaitingOrders();
 
-    // Group orders by drawer
+    // Group orders by drawer (Drawers 1 through 19)
     const drawerGroups = {};
-    for (let i = 1; i <= 12; i++) {
+    for (let i = 1; i <= 19; i++) {
       drawerGroups[String(i)] = [];
     }
     drawerGroups['Unassigned'] = [];
@@ -93,10 +93,10 @@ export class DrawerRack {
         <div class="clos-drawer-header">
           <div>
             <h2 class="clos-drawer-title">
-              🗄️ Contact Lens Drawer Inventory & Quick Locator
+              🗄️ Contact Lens Drawer Inventory & Quick Locator (Drawers 1–19)
             </h2>
             <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #64748b;">
-              Visual rack layout of Pal Optical dispensing drawers. Total Waiting: <strong>${totalWaiting}</strong> (${inDrawers} assigned in drawers).
+              Visual rack layout of Pal Optical dispensing Drawers 1 through 19. Total Waiting: <strong>${totalWaiting}</strong> (${inDrawers} assigned in drawers).
             </p>
           </div>
           <div style="display: flex; gap: 8px;">

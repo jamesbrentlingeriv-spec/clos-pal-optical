@@ -64,7 +64,12 @@ app.post(['/api/contact-lens-orders', '/api/contact-lens-sync'], (req, res) => {
   }
 });
 
-// Serve static build if dist exists
+// Serve public and static build
+const publicDir = path.join(__dirname, 'public');
+if (fs.existsSync(publicDir)) {
+  app.use(express.static(publicDir));
+}
+
 const distDir = path.join(__dirname, 'dist');
 if (fs.existsSync(distDir)) {
   app.use(express.static(distDir));

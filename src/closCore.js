@@ -2759,13 +2759,15 @@ export class ContactLensOrderForm {
 
             </td>
 
-            <!-- 12. Drawer -->
+            <!-- 12. Drawer (Drawers 1–19) -->
 
             <td class="col-drawer">
 
               <input 
 
                 type="text" 
+
+                list="clos-drawer-list"
 
                 class="pickup-cell-input input-drawer" 
 
@@ -2775,7 +2777,9 @@ export class ContactLensOrderForm {
 
                 value="${this.escapeAttr(order.drawer)}" 
 
-                placeholder="#"
+                placeholder="1–19"
+
+                title="Drawer 1–19"
 
               >
 
@@ -3149,9 +3153,25 @@ export class ContactLensOrderForm {
                 <input type="text" id="modal-input-received" class="clo-modal-input" placeholder="MM/DD/YYYY" value="${this.escapeAttr(o.dateReceived || '')}">
               </div>
 
-              <div class="clo-form-group">
-                <label>Assigned Drawer #</label>
-                <input type="text" id="modal-input-drawer" class="clo-modal-input" placeholder="e.g. 1, 2, 3..." value="${this.escapeAttr(o.drawer || '')}">
+              <div class="clo-form-group col-span-2">
+                <label style="font-weight: 700; color: #0f172a; display: flex; justify-content: space-between;">
+                  <span>Assigned Drawer # (Choose 1–19)</span>
+                  <span style="font-weight: normal; color: #0284c7; font-size: 0.75rem;">Drawers 1–19</span>
+                </label>
+                <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+                  <select id="modal-select-drawer" class="clo-modal-input" style="width: 140px; font-weight: 700; background: #ffffff;">
+                    <option value="">-- No Drawer --</option>
+                    ${Array.from({ length: 19 }, (_, i) => `<option value="${i + 1}" ${String(o.drawer) === String(i + 1) ? 'selected' : ''}>Drawer ${i + 1}</option>`).join('')}
+                  </select>
+                  <input type="text" id="modal-input-drawer" class="clo-modal-input" placeholder="Or type 1–19..." value="${this.escapeAttr(o.drawer || '')}" style="flex: 1;">
+                </div>
+                <div style="margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px;">
+                  ${Array.from({ length: 19 }, (_, i) => `
+                    <button type="button" class="bento-chip ${String(o.drawer) === String(i + 1) ? 'active' : ''}" data-set-drawer="${i + 1}" style="padding: 2px 7px; font-size: 0.72rem; min-width: 26px; text-align: center;">
+                      ${i + 1}
+                    </button>
+                  `).join('')}
+                </div>
               </div>
 
               <div class="clo-form-group col-span-2">

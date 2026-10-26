@@ -538,7 +538,7 @@ const htmlContent = `<!DOCTYPE html>
     </tr>
     <tr>
       <td class="toc-title">
-        7. Visual Dispensing Drawer Rack (Drawers 1–12)
+        7. Visual Dispensing Drawer Rack (Drawers 1–19)
         <span>Locating contacts in office drawers instantly and 1-click checkout.</span>
       </td>
       <td class="toc-page">Ch. 7</td>
@@ -566,6 +566,13 @@ const htmlContent = `<!DOCTYPE html>
     </tr>
     <tr>
       <td class="toc-title">
+        11. Multi-Computer Cloud Synchronization
+        <span>Real-time cloud sync, doctor's exam room connection, and offline resilience.</span>
+      </td>
+      <td class="toc-page">Ch. 11</td>
+    </tr>
+    <tr>
+      <td class="toc-title">
         ⭐ Appendix: Front Desk "Laminated Cheat Sheet"
         <span>Single-page desk summary for instant daily reference.</span>
       </td>
@@ -585,7 +592,7 @@ const htmlContent = `<!DOCTYPE html>
     <div class="callout-icon">🔒</div>
     <div class="callout-content">
       <strong>Role Permissions & Security Summary</strong>
-      Front desk staff can ALWAYS freely update: <strong>(1) Date received from distributor (📅)</strong>, <strong>(2) Drawer number (1–12)</strong>, <strong>(3) Date called / voicemail (📞/LVM)</strong>, <strong>(4) Date picked up (✓ Done)</strong>, and <strong>(5) How they paid (Pd?)</strong> without needing any password! Only modifying clinical prescriptions, patient names, box quantities, or deleting orders strictly requires the Doctor's Password (<span class="pill pill-dark">eye_doctor</span>). Front desk login password is <span class="pill pill-dark">berry</span>.
+      Front desk staff can ALWAYS freely update: <strong>(1) Date received from distributor (📅)</strong>, <strong>(2) Drawer number (1–19)</strong>, <strong>(3) Date called / voicemail (📞/LVM)</strong>, <strong>(4) Date picked up (✓ Done)</strong>, and <strong>(5) How they paid (Pd?)</strong> without needing any password! Only modifying clinical prescriptions, patient names, box quantities, or deleting orders strictly requires the Doctor's Password (<span class="pill pill-dark">eye_doctor</span>). Front desk login password is <span class="pill pill-dark">berry</span>.
     </div>
   </div>
 
@@ -976,7 +983,7 @@ const htmlContent = `<!DOCTYPE html>
       <tr>
         <td>12</td>
         <td><strong>Drawer #</strong></td>
-        <td>Dispensing drawer number (Drawers 1–12; type drawer number anytime).</td>
+        <td>Dispensing drawer number (Drawers 1–19; type drawer number anytime).</td>
         <td><span class="pill pill-green">🟢 Staff Unlocked</span></td>
       </tr>
       <tr>
@@ -1128,13 +1135,13 @@ const htmlContent = `<!DOCTYPE html>
   <!-- ==================================================================== -->
   <!-- CHAPTER 7: VISUAL DRAWER RACK                                        -->
   <!-- ==================================================================== -->
-  <h2>Chapter 7: Visual Dispensing Drawer Rack (Drawers 1–12)</h2>
+  <h2>Chapter 7: Visual Dispensing Drawer Rack (Drawers 1–19)</h2>
 
   <p>The <strong>🗄️ Drawer Rack</strong> provides a live visual map of Pal Optical's physical contact lens storage drawers. To open it, click the <strong>🗄️ Drawer Rack</strong> button on the top executive header.</p>
 
   <h3>How the Drawer Rack Works</h3>
   <ul>
-    <li><strong>12 Numbered Drawer Cards:</strong> Corresponds to physical Drawers 1 through 12 in the dispensary.</li>
+    <li><strong>12 Numbered Drawer Cards:</strong> Corresponds to physical Drawers 1 through 19 in the dispensary.</li>
     <li><strong>In Transit / No Drawer Card:</strong> Shows packages that Dr. Robbins ordered but have not yet been assigned to a physical drawer.</li>
     <li><strong>Patient Cards Inside Drawers:</strong> Each drawer card displays the patient's name, brand, phone number, arrival date, and call status.</li>
     <li><strong>Live Badge Count:</strong> Displays how many boxes or patient packages are currently inside each drawer (e.g. <code>2 Boxes</code>). Drawers with packages light up in sky blue.</li>
@@ -1348,11 +1355,94 @@ const htmlContent = `<!DOCTYPE html>
       <div class="step-title">"What is the Doctor's Password if the doctor is not at the desk?"</div>
     </div>
     <p class="step-desc">
-      The Doctor's Security Password is <code>eye_doctor</code> (all lowercase, with an underscore). Front desk staff password is <code>berry</code>.
+      telling you would defeat the purpose of having one silly goose.
     </p>
   </div>
 
   <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- CHAPTER 11: MULTI-COMPUTER CLOUD SYNCHRONIZATION                     -->
+  <!-- ==================================================================== -->
+  <h2>Chapter 11: Multi-Computer Cloud Synchronization</h2>
+  <p style="color: #475569; margin-bottom: 12px;">
+    How C.L.O.S. connects Dr. Robbins' examination room, reception desk, and optical lab workstations in live real-time across the office.
+  </p>
+
+  <!-- Live Sync Diagram -->
+  <div style="display: flex; align-items: center; justify-content: space-between; background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 14px 20px; margin: 12px 0 18px 0; color: #ffffff;">
+    <div style="text-align: center; flex: 1;">
+      <div style="font-size: 9pt; font-weight: 800; color: #38bdf8;">👩‍💼 Front Desk PC</div>
+      <div style="font-size: 7.5pt; color: #94a3b8;">Intake, Drawers 1–19, Pickup</div>
+      <div style="font-size: 7pt; color: #a7f3d0; margin-top: 3px;">Pass: <code>berry</code></div>
+    </div>
+    <div style="font-size: 14pt; color: #38bdf8; font-weight: bold; padding: 0 12px;">⇄</div>
+    <div style="background: #0369a1; padding: 8px 16px; border-radius: 10px; border: 1px solid #38bdf8; text-align: center; min-width: 150px;">
+      <div style="font-size: 8.5pt; font-weight: 800; color: #ffffff;">☁️ Cloud Real-Time DB</div>
+      <div style="font-size: 7.5pt; color: #bae6fd;">Instant Live Push (SSE)</div>
+      <div style="font-size: 7pt; color: #facc15; margin-top: 2px;">Secured by Firebase</div>
+    </div>
+    <div style="font-size: 14pt; color: #38bdf8; font-weight: bold; padding: 0 12px;">⇄</div>
+    <div style="text-align: center; flex: 1;">
+      <div style="font-size: 9pt; font-weight: 800; color: #38bdf8;">🩺 Dr. Robbins' Station</div>
+      <div style="font-size: 7.5pt; color: #94a3b8;">Exam Room PC / iPad</div>
+      <div style="font-size: 7pt; color: #fca5a5; margin-top: 3px;">Pass: <code>eye_doctor</code></div>
+    </div>
+  </div>
+
+  <h3>How Multi-Computer Connection Works</h3>
+  <p>
+    When Front Desk adds a contact lens order or assigns a package to Drawers 1–19 at <strong><a href="https://clordersystem.vercel.app/" style="color: #0284c7; text-decoration: underline;">https://clordersystem.vercel.app/</a></strong>, the change streams across the cloud to Dr. Robbins' exam room in under one second. Neither station overwrites the other because each update is timestamped and merged automatically.
+  </p>
+
+  <h3>Connecting Dr. Robbins' Computer (In 3 Simple Steps)</h3>
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title">Open the Web Address on the Doctor's Computer or Tablet</div>
+    </div>
+    <p class="step-desc">
+      In Chrome, Edge, or Safari, go to: <strong><a href="https://clordersystem.vercel.app/" style="color: #0284c7;">https://clordersystem.vercel.app/</a></strong> (bookmark this link or install as PWA).
+    </p>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">Log In as Dr. Robbins</div>
+    </div>
+    <p class="step-desc">
+      Click <strong>🩺 Dr. Robbins</strong> (or enter username <code>doctor</code> and password <code>eye_doctor</code>). Check <em>Keep Station Signed In</em> so you only log in once.
+    </p>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title">View Orders in the Doctor's Queue</div>
+    </div>
+    <p class="step-desc">
+      Click the <strong>🩺 Doctor's Queue</strong> tab. Any patient batch sent from the front desk appears on screen instantly. When the doctor enters the prescription and clicks <em>Mark as Ordered & Send to Waiting Sheet</em>, the patient moves immediately onto the front desk's 50-row Waiting Sheet!
+    </p>
+  </div>
+
+  <div class="callout callout-green">
+    <div class="callout-icon">🛡️</div>
+    <div class="callout-content">
+      <strong>Offline-First Resilience ("What if the Internet Goes Down?"):</strong><br>
+      C.L.O.S. stores a full copy of all data in browser memory (<code>localStorage</code>). If the office internet cuts out, <strong>the app never crashes or locks up</strong>. Staff can continue adding orders, checking drawers 1–19, and completing pickups normally. All queued changes automatically upload to the cloud the instant connection returns.
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <div class="callout-icon">☁️</div>
+    <div class="callout-content">
+      <strong>Interactive Cloud Sync Indicator:</strong><br>
+      The <strong>☁️ Cloud Synced</strong> pill in the top navigation bar pulses green when live sync is active. Clicking it opens the <em>Multi-Computer Cloud Sync Dashboard</em> with a 1-click <strong>📋 Copy Doctor's Link</strong>, live record counts, and a <strong>🔄 Sync Now</strong> button to force a manual refresh anytime.
+    </div>
+  </div>
+
+<div class="page-break"></div>
 
   <!-- ==================================================================== -->
   <!-- APPENDIX: FRONT DESK CHEAT SHEET                                     -->
@@ -1418,7 +1508,23 @@ const htmlContent = `<!DOCTYPE html>
       <br><strong>Optometrist & Clinical Director:</strong> Dr. Robbins
       <br><strong>Office:</strong> Pal Optical Co. • Lexington, Kentucky
     </div>
+  
+  <div class="page-break"></div>
+
+  <!-- ==================================================================== -->
+  <!-- BACK COVER: SECURITY & CERTIFICATION BADGES                         -->
+  <!-- ==================================================================== -->
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; gap: 40px; padding: 40px 20px;">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap;">
+      <img src="/manual_assets/badge_1.png" alt="HIPAA Compliant" style="width: 220px; height: 220px; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">
+      <img src="/manual_assets/badge_2.png" alt="Secured by Firebase" style="width: 220px; height: 220px; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));">
+    </div>
+    <div style="margin-top: 30px;">
+      <img src="/manual_assets/badge_3.png" alt="James Brentlinger Systems" style="max-width: 480px; width: 100%; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.25)); border-radius: 16px;">
+    </div>
   </div>
+
+</div>
 
 </body>
 </html>

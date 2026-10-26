@@ -63,6 +63,50 @@ class ClosApplication {
     }
   }
 
+
+  openManualViewer() {
+    const modalId = 'clos-web-manual-modal';
+    let modalEl = document.getElementById(modalId);
+    if (!modalEl) {
+      modalEl = document.createElement('div');
+      modalEl.id = modalId;
+      document.body.appendChild(modalEl);
+    }
+
+    modalEl.innerHTML = `
+      <div class="clo-modal-backdrop" style="z-index: 10000; padding: 12px; display: flex; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px);">
+        <div class="clo-modal-card" style="max-width: 1100px; width: 95vw; height: 92vh; display: flex; flex-direction: column; border: 2px solid #0284c7; border-radius: 14px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6); background: #ffffff;">
+          <div class="clo-modal-header" style="background: linear-gradient(135deg, #0f172a, #0369a1); color: #ffffff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.5rem;">📖</span>
+              <div>
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #ffffff;">C.L.O.S. Operations Manual (18 Pages)</h3>
+                <span style="font-size: 0.75rem; color: #bae6fd;">Standard Operating Procedures & Complete Staff Training Manual</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <a href="/manual.html" target="_blank" class="clo-btn clo-btn-secondary" style="font-size: 0.8rem; padding: 6px 12px; text-decoration: none; color: #0f172a; background: #ffffff; font-weight: 600; border-radius: 6px;">
+                🌐 Open in New Tab
+              </a>
+              <a href="/CLOS_Operations_Manual.pdf" download="CLOS_Operations_Manual.pdf" target="_blank" class="clo-btn clo-btn-primary" style="font-size: 0.8rem; padding: 6px 14px; text-decoration: none; background: #10b981; color: #ffffff; font-weight: 700; border-radius: 6px;">
+                📄 Download PDF
+              </a>
+              <button type="button" class="clo-modal-close-btn" id="btn-close-manual-viewer" style="color: #cbd5e1; font-size: 1.4rem; margin-left: 8px; background: transparent; border: none; cursor: pointer; padding: 4px 8px;">✕</button>
+            </div>
+          </div>
+          <div class="clo-modal-body" style="padding: 0; flex: 1; overflow: hidden; background: #f8fafc; position: relative;">
+            <iframe src="/manual.html" style="width: 100%; height: 100%; border: none;" title="C.L.O.S. Web Operations Manual"></iframe>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const closeBtn = modalEl.querySelector('#btn-close-manual-viewer');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => modalEl.remove());
+    }
+  }
+
   mountApp() {
     const appRoot = document.getElementById('clos-app-root');
     if (!appRoot) return;
@@ -154,10 +198,10 @@ class ClosApplication {
             <span>Restore</span>
           </button>
 
-          <!-- Operations Manual PDF Link -->
-          <a href="/C.L.O.S. Operations Manual.pdf" target="_blank" class="clos-icon-btn" id="btn-open-manual" title="Open Full PDF Operations Manual" style="text-decoration: none;">
+          <!-- Operations Web Manual & PDF -->
+          <button type="button" class="clos-icon-btn" id="btn-open-manual" title="Open Complete Web Manual & Download PDF">
             <span>📖 Manual</span>
-          </a>
+          </button>
 
           <!-- Replay 1.5s Splash Animation -->
           <button type="button" class="clos-icon-btn" id="btn-replay-splash" title="Replay 1.5-Second Splash Animation">
@@ -265,6 +309,15 @@ class ClosApplication {
           }
         };
         input.click();
+      });
+    }
+
+    // Open Web Manual & PDF Viewer
+    const manualBtn = document.getElementById('btn-open-manual');
+    if (manualBtn) {
+      manualBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.openManualViewer();
       });
     }
 

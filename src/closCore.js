@@ -1034,6 +1034,89 @@ export class ContactLensOrderForm {
 
   }
 
+  parseRxComponents(rxStr) {
+    const result = {
+      sphere: '',
+      cyl: '',
+      axis: '',
+      add: '',
+      bc: '',
+      dia: '',
+      lensType: 'spherical'
+    };
+    if (!rxStr || typeof rxStr !== 'string') return result;
+
+    let s = rxStr.trim();
+
+    // 1. Extract Base Curve (BC) e.g. BC: 8.6, BC 8.6, 8.6 BC
+    const bcMatch = s.match(/(?:BC|B\.C\.|Base\s*Curve)[:\s]*([0-9]\.[0-9]+)/i);
+    if (bcMatch) {
+      result.bc = bcMatch[1];
+      s = s.replace(bcMatch[0], ' ');
+    }
+
+    // 2. Extract Diameter (DIA) e.g. DIA: 14.2, DIA 14.2, 14.2 DIA
+    const diaMatch = s.match(/(?:DIA|Diameter)[:\s]*([0-9]{2}\.[0-9]+)/i);
+    if (diaMatch) {
+      result.dia = diaMatch[1];
+      s = s.replace(diaMatch[0], ' ');
+    }
+
+    // 3. Extract Add Power (ADD) e.g. Add: Low, Add: Med, Add: High, Add Low, Low, +2.00
+    const addMatch = s.match(/(?:ADD|Add\s*Power)[:\s]*([A-Za-z0-9\.+-]+)/i) ||
+                     s.match(/\b(Low|Medium|Med|High)\b/i);
+    if (addMatch) {
+      result.add = addMatch[1];
+      s = s.replace(addMatch[0], ' ');
+    }
+
+    // 4. Extract Cylinder & Axis (CYL x AXIS) e.g. -1.25 x 180, -2.25x090
+    const cylAxisMatch = s.match(/([+-]?[0-9]+\.[0-9]+)\s*x\s*([0-9]{1,3})/i);
+    if (cylAxisMatch) {
+      result.cyl = cylAxisMatch[1];
+      result.axis = cylAxisMatch[2];
+      s = s.replace(cylAxisMatch[0], ' ');
+    }
+
+    // 5. Remaining number or PLANO is Sphere (PWR)
+    const sphereMatch = s.match(/([+-]?[0-9]+\.[0-9]+|PLANO)/i);
+    if (sphereMatch) {
+      result.sphere = sphereMatch[1];
+    } else {
+      result.sphere = s.trim();
+    }
+
+    const hasToric = !!(result.cyl || result.axis);
+    const hasMulti = !!result.add;
+    if (hasToric && hasMulti) {
+      result.lensType = 'toric_multifocal';
+    } else if (hasToric) {
+      result.lensType = 'toric';
+    } else if (hasMulti) {
+      result.lensType = 'multifocal';
+    }
+
+    return result;
+  }
+
+  composeRx(sphere, cyl, axis, add, bc, dia, lensType) {
+    const parts = [];
+    if (sphere && sphere.trim()) parts.push(sphere.trim());
+    if ((lensType === 'toric' || lensType === 'toric_multifocal') && cyl && cyl.trim()) {
+      let cylPart = cyl.trim();
+      if (axis && axis.trim()) {
+        cylPart += ` x ${axis.trim().replace(/°/g, '')}`;
+      }
+      parts.push(cylPart);
+    }
+    if ((lensType === 'multifocal' || lensType === 'toric_multifocal') && add && add.trim()) {
+      parts.push(`Add: ${add.trim()}`);
+    }
+    if (bc && bc.trim()) parts.push(`BC: ${bc.trim()}`);
+    if (dia && dia.trim()) parts.push(`DIA: ${dia.trim()}`);
+    return parts.join('  ');
+  }
+
 
 
   isDoctorAuthorized() {
@@ -1337,6 +1420,24 @@ export class ContactLensOrderForm {
     const drawInp = this.container.querySelector('#modal-input-drawer');
     const callInp = this.container.querySelector('#modal-input-called');
 
+    // Detailed Optical Rx inputs
+    const sphereRInp = this.container.querySelector('#modal-input-sphere-r');
+    const bcRInp = this.container.querySelector('#modal-input-bc-r');
+    const diaRInp = this.container.querySelector('#modal-input-dia-r');
+    const cylRInp = this.container.querySelector('#modal-input-cyl-r');
+    const axisRInp = this.container.querySelector('#modal-input-axis-r');
+    const addRInp = this.container.querySelector('#modal-input-add-r');
+
+    const sphereLInp = this.container.querySelector('#modal-input-sphere-l');
+    const bcLInp = this.container.querySelector('#modal-input-bc-l');
+    const diaLInp = this.container.querySelector('#modal-input-dia-l');
+    const cylLInp = this.container.querySelector('#modal-input-cyl-l');
+    const axisLInp = this.container.querySelector('#modal-input-axis-l');
+    const addLInp = this.container.querySelector('#modal-input-add-l');
+
+    // Insurance fields
+    const insCarrierInp = this.container.querySelector('#modal-input-ins-carrier');
+
     const patientName = (patInp?.value || m.patient || '').trim();
     if (!patientName) {
       alert('Please enter a patient name.');
@@ -1362,6 +1463,22 @@ export class ContactLensOrderForm {
       dateReceived: recdInp ? recdInp.value.trim() : (m.dateReceived || ''),
       drawer: drawInp ? drawInp.value.trim() : (m.drawer || ''),
       dateCalled: callInp ? callInp.value.trim() : (m.dateCalled || ''),
+      // Persist detailed Rx parameters
+      lensType: m.lensType || 'spherical',
+      odSphere: sphereRInp ? sphereRInp.value.trim() : (m.odSphere || ''),
+      odBc: bcRInp ? bcRInp.value.trim() : (m.odBc || ''),
+      odDia: diaRInp ? diaRInp.value.trim() : (m.odDia || ''),
+      odCyl: cylRInp ? cylRInp.value.trim() : (m.odCyl || ''),
+      odAxis: axisRInp ? axisRInp.value.trim() : (m.odAxis || ''),
+      odAdd: addRInp ? addRInp.value.trim() : (m.odAdd || ''),
+      osSphere: sphereLInp ? sphereLInp.value.trim() : (m.osSphere || ''),
+      osBc: bcLInp ? bcLInp.value.trim() : (m.osBc || ''),
+      osDia: diaLInp ? diaLInp.value.trim() : (m.osDia || ''),
+      osCyl: cylLInp ? cylLInp.value.trim() : (m.osCyl || ''),
+      osAxis: axisLInp ? axisLInp.value.trim() : (m.osAxis || ''),
+      osAdd: addLInp ? addLInp.value.trim() : (m.osAdd || ''),
+      insuranceCarrier: insCarrierInp ? insCarrierInp.value.trim() : (m.insuranceCarrier || ''),
+      insuranceCoverage: m.insuranceCoverage || 'full',
       doctorOrdered: true,
       doctorOrderedAt: m.doctorOrderedAt || new Date().toLocaleDateString('en-US'),
       status: m.status === 'pending_doctor' ? 'ordered' : m.status,
@@ -2879,6 +2996,46 @@ export class ContactLensOrderForm {
 
     if (!o) return '';
 
+    const odParsed = this.parseRxComponents(o.rxRight);
+    const osParsed = this.parseRxComponents(o.rxLeft);
+
+    let lensType = o.lensType || odParsed.lensType || osParsed.lensType || 'spherical';
+
+    const odSphere = o.odSphere !== undefined ? o.odSphere : odParsed.sphere;
+    const odBc = o.odBc !== undefined ? o.odBc : (odParsed.bc || '8.6');
+    const odDia = o.odDia !== undefined ? o.odDia : (odParsed.dia || '14.2');
+    const odCyl = o.odCyl !== undefined ? o.odCyl : odParsed.cyl;
+    const odAxis = o.odAxis !== undefined ? o.odAxis : odParsed.axis;
+    const odAdd = o.odAdd !== undefined ? o.odAdd : odParsed.add;
+
+    const osSphere = o.osSphere !== undefined ? o.osSphere : osParsed.sphere;
+    const osBc = o.osBc !== undefined ? o.osBc : (osParsed.bc || '8.6');
+    const osDia = o.osDia !== undefined ? o.osDia : (osParsed.dia || '14.2');
+    const osCyl = o.osCyl !== undefined ? o.osCyl : osParsed.cyl;
+    const osAxis = o.osAxis !== undefined ? o.osAxis : osParsed.axis;
+    const osAdd = o.osAdd !== undefined ? o.osAdd : osParsed.add;
+
+    // Payment & Insurance resolution
+    let currentPayType = 'unpaid';
+    let insCarrier = o.insuranceCarrier || '';
+    let insCoverage = o.insuranceCoverage || 'full'; // 'full' or 'partial'
+
+    const paidVal = (o.paid || '-').trim();
+    if (paidVal === 'Yes' || paidVal.toLowerCase() === 'paid' || paidVal.toLowerCase() === 'cash' || paidVal.toLowerCase() === 'card') {
+      currentPayType = 'paid';
+    } else if (paidVal !== '-' && paidVal !== 'No' && paidVal !== 'trials' && paidVal !== '') {
+      currentPayType = 'insurance';
+      if (!insCarrier) {
+        const match = paidVal.match(/Ins(?:\:\s*|\s*\()?\s*([A-Za-z0-9\s/]+?)(?:\s*-\s*(Full|Partial)\)?)?$/i);
+        if (match) {
+          insCarrier = match[1].replace(/[\(\)]/g, '').trim();
+          if (match[2]) insCoverage = match[2].toLowerCase();
+        } else {
+          insCarrier = paidVal.replace(/^Ins:\s*/i, '').trim();
+        }
+      }
+    }
+
     return `
 
       <div class="clo-modal-backdrop" id="doctor-rx-modal">
@@ -3006,120 +3163,376 @@ export class ContactLensOrderForm {
 
               </div>
 
-              <!-- Prescription Section -->
+              <!-- Prescription Section with Toric, Multifocal, BC & DIA -->
 
-              <div class="clo-rx-section-box col-span-2">
+              <div class="clo-rx-section-box col-span-2" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 18px; margin-top: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
 
-                <div class="clo-rx-header">
+                <div class="clo-rx-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
 
-                  <h4>Contact Lens Prescription</h4>
+                  <div>
+                    <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #0f172a;">Contact Lens Prescription</h4>
+                    <span style="font-size: 0.75rem; color: #64748b;">Specify Spherical, Toric (Cyl/Axis), Multifocal (Add), Base Curve & Diameter</span>
+                  </div>
 
-                  <button type="button" class="clo-btn clo-btn-ghost btn-copy-rx-left" style="font-size: 0.8rem; padding: 4px 10px;">
+                  <button type="button" class="clo-btn clo-btn-ghost btn-copy-rx-left" style="font-size: 0.82rem; padding: 6px 14px; font-weight: 700; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; border-radius: 8px;">
 
-                    ⇄ Copy Right Eye to Left Eye
+                    ⇄ Copy Right Eye (OD) to Left Eye (OS)
 
                   </button>
 
                 </div>
 
-                <div class="clo-rx-inputs-grid">
+                <!-- Lens Type Selector: Spherical, Toric, Multifocal, Toric Multifocal -->
+                <div style="background: #f8fafc; padding: 12px 16px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                    <span style="font-weight: 800; font-size: 0.85rem; color: #0f172a;">Lens Optical Type:</span>
+                    <div class="rx-lens-type-chips" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                      <button type="button" class="bento-chip btn-lens-type ${lensType === 'spherical' ? 'active-type-btn' : ''}" data-lens-type="spherical">
+                        ⚪ Spherical
+                      </button>
+                      <button type="button" class="bento-chip btn-lens-type ${lensType === 'toric' ? 'active-type-btn' : ''}" data-lens-type="toric">
+                        📐 Toric (Cyl & Axis)
+                      </button>
+                      <button type="button" class="bento-chip btn-lens-type ${lensType === 'multifocal' ? 'active-type-btn' : ''}" data-lens-type="multifocal">
+                        🔍 Multifocal (Add Power)
+                      </button>
+                      <button type="button" class="bento-chip btn-lens-type ${lensType === 'toric_multifocal' ? 'active-type-btn' : ''}" data-lens-type="toric_multifocal">
+                        ⭐ Toric Multifocal (Both)
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
-                  <!-- Right Eye -->
+                <div class="clo-rx-inputs-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
 
-                  <div class="clo-rx-col">
+                  <!-- Right Eye (OD) -->
+                  <div class="clo-rx-col" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 14px;">
 
-                    <span class="rx-eye-badge badge-od">OD (Right Eye)</span>
-
-                    <div class="clo-form-group">
-
-                      <label>Rx (Right):</label>
-
-                      <input 
-
-                        type="text" 
-
-                        id="modal-input-rx-r" 
-
-                        class="clo-modal-input" 
-
-                        placeholder="e.g. -1.25 -2.25 x 100 or +1.75 +2.00 N"
-
-                        value="${this.escapeAttr(o.rxRight)}"
-
-                      >
-
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                      <span class="rx-eye-badge badge-od" style="background: #0284c7; color: #ffffff; padding: 3px 10px; border-radius: 6px; font-weight: 800; font-size: 0.8rem;">OD (Right Eye)</span>
                     </div>
 
-                    <div class="clo-form-group">
-
-                      <label># Qty (Right):</label>
-
+                    <!-- Sphere Power -->
+                    <div class="clo-form-group" style="margin-bottom: 12px;">
+                      <label style="font-weight: 700; font-size: 0.82rem; color: #0f172a;">Sphere (Power) *</label>
                       <input 
-
                         type="text" 
-
-                        id="modal-input-qty-r" 
-
-                        class="clo-modal-input" 
-
-                        style="max-width: 90px;"
-
-                        placeholder="1"
-
-                        value="${this.escapeAttr(o.qtyRight || '1')}"
-
+                        id="modal-input-sphere-r" 
+                        class="clo-modal-input rx-param-input" 
+                        placeholder="-2.50" 
+                        value="${this.escapeAttr(odSphere)}"
+                        style="font-weight: 700; font-size: 0.95rem; background: #ffffff;"
                       >
+                      <div class="clo-brand-chips" style="margin-top: 4px;">
+                        <button type="button" class="bento-chip" data-set-sphere-r="-1.00">-1.00</button>
+                        <button type="button" class="bento-chip" data-set-sphere-r="-1.50">-1.50</button>
+                        <button type="button" class="bento-chip" data-set-sphere-r="-2.00">-2.00</button>
+                        <button type="button" class="bento-chip" data-set-sphere-r="-2.50">-2.50</button>
+                        <button type="button" class="bento-chip" data-set-sphere-r="-3.00">-3.00</button>
+                        <button type="button" class="bento-chip" data-set-sphere-r="-3.50">-3.50</button>
+                        <button type="button" class="bento-chip" data-set-sphere-r="PLANO">PLANO</button>
+                        <button type="button" class="bento-chip" data-set-sphere-r="+1.50">+1.50</button>
+                        <button type="button" class="bento-chip" data-set-sphere-r="+2.00">+2.00</button>
+                      </div>
+                    </div>
 
+                    <!-- Base Curve & Diameter (Row) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                      <div class="clo-form-group">
+                        <label style="font-weight: 700; font-size: 0.8rem; color: #0f172a;">Base Curve (BC)</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-bc-r" 
+                          class="clo-modal-input rx-param-input" 
+                          placeholder="8.6" 
+                          value="${this.escapeAttr(odBc)}"
+                          style="font-weight: 600; background: #ffffff;"
+                        >
+                        <div class="clo-brand-chips" style="margin-top: 4px;">
+                          <button type="button" class="bento-chip" data-set-bc-r="8.4">8.4</button>
+                          <button type="button" class="bento-chip" data-set-bc-r="8.5">8.5</button>
+                          <button type="button" class="bento-chip" data-set-bc-r="8.6">8.6</button>
+                          <button type="button" class="bento-chip" data-set-bc-r="8.7">8.7</button>
+                          <button type="button" class="bento-chip" data-set-bc-r="8.8">8.8</button>
+                        </div>
+                      </div>
+
+                      <div class="clo-form-group">
+                        <label style="font-weight: 700; font-size: 0.8rem; color: #0f172a;">Diameter (DIA)</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-dia-r" 
+                          class="clo-modal-input rx-param-input" 
+                          placeholder="14.2" 
+                          value="${this.escapeAttr(odDia)}"
+                          style="font-weight: 600; background: #ffffff;"
+                        >
+                        <div class="clo-brand-chips" style="margin-top: 4px;">
+                          <button type="button" class="bento-chip" data-set-dia-r="14.0">14.0</button>
+                          <button type="button" class="bento-chip" data-set-dia-r="14.2">14.2</button>
+                          <button type="button" class="bento-chip" data-set-dia-r="14.4">14.4</button>
+                          <button type="button" class="bento-chip" data-set-dia-r="14.5">14.5</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Toric Section: Cylinder & Axis -->
+                    <div id="rx-toric-block-r" style="${(lensType === 'toric' || lensType === 'toric_multifocal') ? 'display: block;' : 'display: none;'} background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+                      <div style="font-weight: 800; font-size: 0.78rem; color: #0369a1; margin-bottom: 6px;">📐 Toric Astigmatism (OD)</div>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div class="clo-form-group">
+                          <label style="font-weight: 700; font-size: 0.75rem; color: #0369a1;">Cylinder (CYL)</label>
+                          <input 
+                            type="text" 
+                            id="modal-input-cyl-r" 
+                            class="clo-modal-input rx-param-input" 
+                            placeholder="-0.75" 
+                            value="${this.escapeAttr(odCyl)}"
+                            style="font-weight: 700; background: #ffffff;"
+                          >
+                          <div class="clo-brand-chips" style="margin-top: 3px;">
+                            <button type="button" class="bento-chip" data-set-cyl-r="-0.75">-0.75</button>
+                            <button type="button" class="bento-chip" data-set-cyl-r="-1.25">-1.25</button>
+                            <button type="button" class="bento-chip" data-set-cyl-r="-1.75">-1.75</button>
+                            <button type="button" class="bento-chip" data-set-cyl-r="-2.25">-2.25</button>
+                          </div>
+                        </div>
+
+                        <div class="clo-form-group">
+                          <label style="font-weight: 700; font-size: 0.75rem; color: #0369a1;">Axis (°)</label>
+                          <input 
+                            type="text" 
+                            id="modal-input-axis-r" 
+                            class="clo-modal-input rx-param-input" 
+                            placeholder="180" 
+                            value="${this.escapeAttr(odAxis)}"
+                            style="font-weight: 700; background: #ffffff;"
+                          >
+                          <div class="clo-brand-chips" style="margin-top: 3px;">
+                            <button type="button" class="bento-chip" data-set-axis-r="180">180°</button>
+                            <button type="button" class="bento-chip" data-set-axis-r="090">090°</button>
+                            <button type="button" class="bento-chip" data-set-axis-r="010">010°</button>
+                            <button type="button" class="bento-chip" data-set-axis-r="020">020°</button>
+                            <button type="button" class="bento-chip" data-set-axis-r="160">160°</button>
+                            <button type="button" class="bento-chip" data-set-axis-r="170">170°</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Multifocal Section: Add Power (Low, Med, High) -->
+                    <div id="rx-multi-block-r" style="${(lensType === 'multifocal' || lensType === 'toric_multifocal') ? 'display: block;' : 'display: none;'} background: #fdf4ff; border: 1px solid #f0abfc; border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+                      <div style="font-weight: 800; font-size: 0.78rem; color: #a21caf; margin-bottom: 6px;">🔍 Multifocal Add Power (OD)</div>
+                      <div class="clo-form-group">
+                        <label style="font-weight: 700; font-size: 0.75rem; color: #a21caf;">Add Power (Low, Medium, High, or Diopters)</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-add-r" 
+                          class="clo-modal-input rx-param-input" 
+                          placeholder="Low, Medium, High, or +2.00" 
+                          value="${this.escapeAttr(odAdd)}"
+                          style="font-weight: 700; background: #ffffff;"
+                        >
+                        <div class="clo-brand-chips" style="margin-top: 4px;">
+                          <button type="button" class="bento-chip" data-set-add-r="Low" style="font-weight: 700; color: #a21caf;">Low</button>
+                          <button type="button" class="bento-chip" data-set-add-r="Medium" style="font-weight: 700; color: #a21caf;">Medium</button>
+                          <button type="button" class="bento-chip" data-set-add-r="High" style="font-weight: 700; color: #a21caf;">High</button>
+                          <button type="button" class="bento-chip" data-set-add-r="+1.00">+1.00</button>
+                          <button type="button" class="bento-chip" data-set-add-r="+1.50">+1.50</button>
+                          <button type="button" class="bento-chip" data-set-add-r="+2.00">+2.00</button>
+                          <button type="button" class="bento-chip" data-set-add-r="+2.50">+2.50</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Quantity & Full Rx Output -->
+                    <div style="display: flex; gap: 10px; align-items: flex-end;">
+                      <div class="clo-form-group" style="width: 90px; flex-shrink: 0;">
+                        <label style="font-weight: 700; font-size: 0.78rem;"># Boxes</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-qty-r" 
+                          class="clo-modal-input" 
+                          value="${this.escapeAttr(o.qtyRight || '1')}"
+                          style="font-weight: 700; text-align: center; background: #ffffff;"
+                        >
+                      </div>
+                      <div class="clo-form-group" style="flex: 1;">
+                        <label style="font-weight: 700; font-size: 0.78rem; color: #475569;">Recorded Rx (OD):</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-rx-r" 
+                          class="clo-modal-input" 
+                          value="${this.escapeAttr(o.rxRight || this.composeRx(odSphere, odCyl, odAxis, odAdd, odBc, odDia, lensType))}"
+                          style="font-weight: 700; background: #ffffff; color: #0284c7;"
+                        >
+                      </div>
                     </div>
 
                   </div>
 
-                  <!-- Left Eye -->
+                  <!-- Left Eye (OS) -->
+                  <div class="clo-rx-col" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 14px;">
 
-                  <div class="clo-rx-col">
-
-                    <span class="rx-eye-badge badge-os">OS (Left Eye)</span>
-
-                    <div class="clo-form-group">
-
-                      <label>Rx (Left):</label>
-
-                      <input 
-
-                        type="text" 
-
-                        id="modal-input-rx-l" 
-
-                        class="clo-modal-input" 
-
-                        placeholder="e.g. -0.50 -1.75 x 090 or same both eyes"
-
-                        value="${this.escapeAttr(o.rxLeft)}"
-
-                      >
-
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                      <span class="rx-eye-badge badge-os" style="background: #475569; color: #ffffff; padding: 3px 10px; border-radius: 6px; font-weight: 800; font-size: 0.8rem;">OS (Left Eye)</span>
                     </div>
 
-                    <div class="clo-form-group">
-
-                      <label># Qty (Left):</label>
-
+                    <!-- Sphere Power -->
+                    <div class="clo-form-group" style="margin-bottom: 12px;">
+                      <label style="font-weight: 700; font-size: 0.82rem; color: #0f172a;">Sphere (Power) *</label>
                       <input 
-
                         type="text" 
-
-                        id="modal-input-qty-l" 
-
-                        class="clo-modal-input" 
-
-                        style="max-width: 90px;"
-
-                        placeholder="1"
-
-                        value="${this.escapeAttr(o.qtyLeft || '1')}"
-
+                        id="modal-input-sphere-l" 
+                        class="clo-modal-input rx-param-input" 
+                        placeholder="-2.50" 
+                        value="${this.escapeAttr(osSphere)}"
+                        style="font-weight: 700; font-size: 0.95rem; background: #ffffff;"
                       >
+                      <div class="clo-brand-chips" style="margin-top: 4px;">
+                        <button type="button" class="bento-chip" data-set-sphere-l="-1.00">-1.00</button>
+                        <button type="button" class="bento-chip" data-set-sphere-l="-1.50">-1.50</button>
+                        <button type="button" class="bento-chip" data-set-sphere-l="-2.00">-2.00</button>
+                        <button type="button" class="bento-chip" data-set-sphere-l="-2.50">-2.50</button>
+                        <button type="button" class="bento-chip" data-set-sphere-l="-3.00">-3.00</button>
+                        <button type="button" class="bento-chip" data-set-sphere-l="-3.50">-3.50</button>
+                        <button type="button" class="bento-chip" data-set-sphere-l="PLANO">PLANO</button>
+                        <button type="button" class="bento-chip" data-set-sphere-l="+1.50">+1.50</button>
+                        <button type="button" class="bento-chip" data-set-sphere-l="+2.00">+2.00</button>
+                      </div>
+                    </div>
 
+                    <!-- Base Curve & Diameter (Row) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                      <div class="clo-form-group">
+                        <label style="font-weight: 700; font-size: 0.8rem; color: #0f172a;">Base Curve (BC)</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-bc-l" 
+                          class="clo-modal-input rx-param-input" 
+                          placeholder="8.6" 
+                          value="${this.escapeAttr(osBc)}"
+                          style="font-weight: 600; background: #ffffff;"
+                        >
+                        <div class="clo-brand-chips" style="margin-top: 4px;">
+                          <button type="button" class="bento-chip" data-set-bc-l="8.4">8.4</button>
+                          <button type="button" class="bento-chip" data-set-bc-l="8.5">8.5</button>
+                          <button type="button" class="bento-chip" data-set-bc-l="8.6">8.6</button>
+                          <button type="button" class="bento-chip" data-set-bc-l="8.7">8.7</button>
+                          <button type="button" class="bento-chip" data-set-bc-l="8.8">8.8</button>
+                        </div>
+                      </div>
+
+                      <div class="clo-form-group">
+                        <label style="font-weight: 700; font-size: 0.8rem; color: #0f172a;">Diameter (DIA)</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-dia-l" 
+                          class="clo-modal-input rx-param-input" 
+                          placeholder="14.2" 
+                          value="${this.escapeAttr(osDia)}"
+                          style="font-weight: 600; background: #ffffff;"
+                        >
+                        <div class="clo-brand-chips" style="margin-top: 4px;">
+                          <button type="button" class="bento-chip" data-set-dia-l="14.0">14.0</button>
+                          <button type="button" class="bento-chip" data-set-dia-l="14.2">14.2</button>
+                          <button type="button" class="bento-chip" data-set-dia-l="14.4">14.4</button>
+                          <button type="button" class="bento-chip" data-set-dia-l="14.5">14.5</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Toric Section: Cylinder & Axis -->
+                    <div id="rx-toric-block-l" style="${(lensType === 'toric' || lensType === 'toric_multifocal') ? 'display: block;' : 'display: none;'} background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+                      <div style="font-weight: 800; font-size: 0.78rem; color: #0369a1; margin-bottom: 6px;">📐 Toric Astigmatism (OS)</div>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div class="clo-form-group">
+                          <label style="font-weight: 700; font-size: 0.75rem; color: #0369a1;">Cylinder (CYL)</label>
+                          <input 
+                            type="text" 
+                            id="modal-input-cyl-l" 
+                            class="clo-modal-input rx-param-input" 
+                            placeholder="-0.75" 
+                            value="${this.escapeAttr(osCyl)}"
+                            style="font-weight: 700; background: #ffffff;"
+                          >
+                          <div class="clo-brand-chips" style="margin-top: 3px;">
+                            <button type="button" class="bento-chip" data-set-cyl-l="-0.75">-0.75</button>
+                            <button type="button" class="bento-chip" data-set-cyl-l="-1.25">-1.25</button>
+                            <button type="button" class="bento-chip" data-set-cyl-l="-1.75">-1.75</button>
+                            <button type="button" class="bento-chip" data-set-cyl-l="-2.25">-2.25</button>
+                          </div>
+                        </div>
+
+                        <div class="clo-form-group">
+                          <label style="font-weight: 700; font-size: 0.75rem; color: #0369a1;">Axis (°)</label>
+                          <input 
+                            type="text" 
+                            id="modal-input-axis-l" 
+                            class="clo-modal-input rx-param-input" 
+                            placeholder="180" 
+                            value="${this.escapeAttr(osAxis)}"
+                            style="font-weight: 700; background: #ffffff;"
+                          >
+                          <div class="clo-brand-chips" style="margin-top: 3px;">
+                            <button type="button" class="bento-chip" data-set-axis-l="180">180°</button>
+                            <button type="button" class="bento-chip" data-set-axis-l="090">090°</button>
+                            <button type="button" class="bento-chip" data-set-axis-l="010">010°</button>
+                            <button type="button" class="bento-chip" data-set-axis-l="020">020°</button>
+                            <button type="button" class="bento-chip" data-set-axis-l="160">160°</button>
+                            <button type="button" class="bento-chip" data-set-axis-l="170">170°</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Multifocal Section: Add Power (Low, Med, High) -->
+                    <div id="rx-multi-block-l" style="${(lensType === 'multifocal' || lensType === 'toric_multifocal') ? 'display: block;' : 'display: none;'} background: #fdf4ff; border: 1px solid #f0abfc; border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+                      <div style="font-weight: 800; font-size: 0.78rem; color: #a21caf; margin-bottom: 6px;">🔍 Multifocal Add Power (OS)</div>
+                      <div class="clo-form-group">
+                        <label style="font-weight: 700; font-size: 0.75rem; color: #a21caf;">Add Power (Low, Medium, High, or Diopters)</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-add-l" 
+                          class="clo-modal-input rx-param-input" 
+                          placeholder="Low, Medium, High, or +2.00" 
+                          value="${this.escapeAttr(osAdd)}"
+                          style="font-weight: 700; background: #ffffff;"
+                        >
+                        <div class="clo-brand-chips" style="margin-top: 4px;">
+                          <button type="button" class="bento-chip" data-set-add-l="Low" style="font-weight: 700; color: #a21caf;">Low</button>
+                          <button type="button" class="bento-chip" data-set-add-l="Medium" style="font-weight: 700; color: #a21caf;">Medium</button>
+                          <button type="button" class="bento-chip" data-set-add-l="High" style="font-weight: 700; color: #a21caf;">High</button>
+                          <button type="button" class="bento-chip" data-set-add-l="+1.00">+1.00</button>
+                          <button type="button" class="bento-chip" data-set-add-l="+1.50">+1.50</button>
+                          <button type="button" class="bento-chip" data-set-add-l="+2.00">+2.00</button>
+                          <button type="button" class="bento-chip" data-set-add-l="+2.50">+2.50</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Quantity & Full Rx Output -->
+                    <div style="display: flex; gap: 10px; align-items: flex-end;">
+                      <div class="clo-form-group" style="width: 90px; flex-shrink: 0;">
+                        <label style="font-weight: 700; font-size: 0.78rem;"># Boxes</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-qty-l" 
+                          class="clo-modal-input" 
+                          value="${this.escapeAttr(o.qtyLeft || '1')}"
+                          style="font-weight: 700; text-align: center; background: #ffffff;"
+                        >
+                      </div>
+                      <div class="clo-form-group" style="flex: 1;">
+                        <label style="font-weight: 700; font-size: 0.78rem; color: #475569;">Recorded Rx (OS):</label>
+                        <input 
+                          type="text" 
+                          id="modal-input-rx-l" 
+                          class="clo-modal-input" 
+                          value="${this.escapeAttr(o.rxLeft || this.composeRx(osSphere, osCyl, osAxis, osAdd, osBc, osDia, lensType))}"
+                          style="font-weight: 700; background: #ffffff; color: #475569;"
+                        >
+                      </div>
                     </div>
 
                   </div>
@@ -3130,7 +3543,7 @@ export class ContactLensOrderForm {
 
               <!-- Billing & Tracking Details -->
               <div class="clo-form-group">
-                <label>Amount Due</label>
+                <label style="font-weight: 700;">Amount Due</label>
                 <input type="text" id="modal-input-amt" class="clo-modal-input" placeholder="e.g. trials, $130.00" value="${this.escapeAttr(o.amtDue || 'trials')}">
                 <div class="clo-brand-chips">
                   <button type="button" class="bento-chip" data-set-amt="trials">trials</button>
@@ -3140,13 +3553,78 @@ export class ContactLensOrderForm {
                 </div>
               </div>
 
-              <div class="clo-form-group">
-                <label>Paid? (Pd?)</label>
-                <input type="text" id="modal-input-pd" class="clo-modal-input" placeholder="e.g. - or Yes" value="${this.escapeAttr(o.paid || '-')}">
-                <div class="clo-brand-chips">
-                  <button type="button" class="bento-chip" data-set-pd="-">- (Unpaid)</button>
-                  <button type="button" class="bento-chip" data-set-pd="Yes">Yes (Paid)</button>
-                  <button type="button" class="bento-chip" data-set-pd="VSP">VSP</button>
+              <!-- Payment & Insurance Status (Pd?) -->
+              <div class="clo-form-group col-span-2" style="background: #f8fafc; padding: 14px; border-radius: 12px; border: 1.5px solid #e2e8f0; margin-top: 4px;">
+                <label style="font-weight: 800; color: #0f172a; margin-bottom: 6px; display: block; font-size: 0.88rem;">
+                  Payment & Insurance Status (Pd?)
+                </label>
+                
+                <!-- 3 Primary Buttons: Unpaid (-), Paid (Yes), Insurance -->
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+                  <button type="button" class="bento-chip btn-pay-type ${currentPayType === 'unpaid' ? 'active-pay-btn' : ''}" data-pay-type="unpaid" style="padding: 7px 16px; font-weight: 700; font-size: 0.88rem;">
+                    ⏳ Unpaid (-)
+                  </button>
+                  <button type="button" class="bento-chip btn-pay-type ${currentPayType === 'paid' ? 'active-pay-btn' : ''}" data-pay-type="paid" style="padding: 7px 16px; font-weight: 700; font-size: 0.88rem;">
+                    💵 Yes (Paid)
+                  </button>
+                  <button type="button" class="bento-chip btn-pay-type ${currentPayType === 'insurance' ? 'active-pay-btn' : ''}" data-pay-type="insurance" style="padding: 7px 16px; font-weight: 700; font-size: 0.88rem;">
+                    🛡️ Insurance
+                  </button>
+                </div>
+
+                <!-- Insurance Details Panel (Visible when Insurance is selected) -->
+                <div id="modal-insurance-panel" style="${currentPayType === 'insurance' ? 'display: block;' : 'display: none;'} background: #ffffff; padding: 14px; border-radius: 10px; border: 1.5px solid #38bdf8; margin-top: 8px;">
+                  <div style="margin-bottom: 12px;">
+                    <label style="font-weight: 800; font-size: 0.82rem; color: #0369a1; display: block; margin-bottom: 4px;">
+                      Insurance Carrier / Plan Name *
+                    </label>
+                    <input 
+                      type="text" 
+                      id="modal-input-ins-carrier" 
+                      class="clo-modal-input" 
+                      placeholder="Type insurance name (e.g. VSP, EyeMed, Spectera, Davis...)" 
+                      value="${this.escapeAttr(insCarrier)}"
+                      style="font-weight: 700; border-color: #7dd3fc; background: #f0f9ff;"
+                    >
+                    <div class="clo-brand-chips" style="margin-top: 6px;">
+                      <span class="chip-label" style="font-size: 0.72rem; color: #64748b; font-weight: 600;">Quick Carriers:</span>
+                      <button type="button" class="bento-chip chip-ins-carrier" data-carrier="VSP">VSP</button>
+                      <button type="button" class="bento-chip chip-ins-carrier" data-carrier="EyeMed">EyeMed</button>
+                      <button type="button" class="bento-chip chip-ins-carrier" data-carrier="Spectera">Spectera</button>
+                      <button type="button" class="bento-chip chip-ins-carrier" data-carrier="Davis Vision">Davis Vision</button>
+                      <button type="button" class="bento-chip chip-ins-carrier" data-carrier="Humana">Humana</button>
+                      <button type="button" class="bento-chip chip-ins-carrier" data-carrier="Medicare">Medicare</button>
+                      <button type="button" class="bento-chip chip-ins-carrier" data-carrier="Anthem / BCBS">Anthem / BCBS</button>
+                    </div>
+                  </div>
+
+                  <!-- Insurance Coverage: Full vs Partial -->
+                  <div>
+                    <label style="font-weight: 800; font-size: 0.82rem; color: #0369a1; display: block; margin-bottom: 6px;">
+                      Coverage Selection:
+                    </label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                      <button type="button" class="bento-chip chip-ins-coverage ${insCoverage === 'full' ? 'active-coverage-btn' : ''}" data-coverage="full" style="padding: 6px 14px; font-weight: 700;">
+                        ✓ Insurance Full Amount
+                      </button>
+                      <button type="button" class="bento-chip chip-ins-coverage ${insCoverage === 'partial' ? 'active-coverage-btn' : ''}" data-coverage="partial" style="padding: 6px 14px; font-weight: 700;">
+                        ⚖️ Insurance Partial
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Formatted Sheet Value Display / Direct Input -->
+                <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <span style="font-size: 0.8rem; font-weight: 700; color: #475569; white-space: nowrap;">Recorded on Waiting Sheet (Pd?):</span>
+                  <input 
+                    type="text" 
+                    id="modal-input-pd" 
+                    class="clo-modal-input" 
+                    placeholder="e.g. -, Yes, Ins: VSP (Full)" 
+                    value="${this.escapeAttr(o.paid || '-')}"
+                    style="font-weight: 800; max-width: 280px; font-size: 0.88rem; background: #ffffff; color: #0f172a;"
+                  >
                 </div>
               </div>
 
@@ -3804,6 +4282,72 @@ export class ContactLensOrderForm {
 
         }
 
+        // Rx quick chips (OD)
+        const setSphereR = chip.getAttribute('data-set-sphere-r');
+        const setBcR = chip.getAttribute('data-set-bc-r');
+        const setDiaR = chip.getAttribute('data-set-dia-r');
+        const setCylR = chip.getAttribute('data-set-cyl-r');
+        const setAxisR = chip.getAttribute('data-set-axis-r');
+        const setAddR = chip.getAttribute('data-set-add-r');
+
+        if (setSphereR) {
+          const inp = this.container.querySelector('#modal-input-sphere-r');
+          if (inp) { inp.value = setSphereR; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setBcR) {
+          const inp = this.container.querySelector('#modal-input-bc-r');
+          if (inp) { inp.value = setBcR; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setDiaR) {
+          const inp = this.container.querySelector('#modal-input-dia-r');
+          if (inp) { inp.value = setDiaR; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setCylR) {
+          const inp = this.container.querySelector('#modal-input-cyl-r');
+          if (inp) { inp.value = setCylR; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setAxisR) {
+          const inp = this.container.querySelector('#modal-input-axis-r');
+          if (inp) { inp.value = setAxisR; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setAddR) {
+          const inp = this.container.querySelector('#modal-input-add-r');
+          if (inp) { inp.value = setAddR; inp.dispatchEvent(new Event('input')); }
+        }
+
+        // Rx quick chips (OS)
+        const setSphereL = chip.getAttribute('data-set-sphere-l');
+        const setBcL = chip.getAttribute('data-set-bc-l');
+        const setDiaL = chip.getAttribute('data-set-dia-l');
+        const setCylL = chip.getAttribute('data-set-cyl-l');
+        const setAxisL = chip.getAttribute('data-set-axis-l');
+        const setAddL = chip.getAttribute('data-set-add-l');
+
+        if (setSphereL) {
+          const inp = this.container.querySelector('#modal-input-sphere-l');
+          if (inp) { inp.value = setSphereL; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setBcL) {
+          const inp = this.container.querySelector('#modal-input-bc-l');
+          if (inp) { inp.value = setBcL; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setDiaL) {
+          const inp = this.container.querySelector('#modal-input-dia-l');
+          if (inp) { inp.value = setDiaL; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setCylL) {
+          const inp = this.container.querySelector('#modal-input-cyl-l');
+          if (inp) { inp.value = setCylL; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setAxisL) {
+          const inp = this.container.querySelector('#modal-input-axis-l');
+          if (inp) { inp.value = setAxisL; inp.dispatchEvent(new Event('input')); }
+        }
+        if (setAddL) {
+          const inp = this.container.querySelector('#modal-input-add-l');
+          if (inp) { inp.value = setAddL; inp.dispatchEvent(new Event('input')); }
+        }
+
       });
 
     });
@@ -4057,28 +4601,124 @@ export class ContactLensOrderForm {
 
     if (cancelDocModal) cancelDocModal.addEventListener('click', () => this.closeDoctorOrderModal());
 
+    // Lens Type Switcher in Doctor Rx Modal
+    const lensTypeBtns = this.container.querySelectorAll('.btn-lens-type');
+    const recomposeRxRight = () => {
+      const sphere = this.container.querySelector('#modal-input-sphere-r')?.value || '';
+      const bc = this.container.querySelector('#modal-input-bc-r')?.value || '';
+      const dia = this.container.querySelector('#modal-input-dia-r')?.value || '';
+      const cyl = this.container.querySelector('#modal-input-cyl-r')?.value || '';
+      const axis = this.container.querySelector('#modal-input-axis-r')?.value || '';
+      const add = this.container.querySelector('#modal-input-add-r')?.value || '';
+      const type = this.state.activeDoctorModalOrder?.lensType || 'spherical';
+      const composed = this.composeRx(sphere, cyl, axis, add, bc, dia, type);
+      const rxRInp = this.container.querySelector('#modal-input-rx-r');
+      if (rxRInp) rxRInp.value = composed;
+      if (this.state.activeDoctorModalOrder) {
+        this.state.activeDoctorModalOrder.odSphere = sphere;
+        this.state.activeDoctorModalOrder.odBc = bc;
+        this.state.activeDoctorModalOrder.odDia = dia;
+        this.state.activeDoctorModalOrder.odCyl = cyl;
+        this.state.activeDoctorModalOrder.odAxis = axis;
+        this.state.activeDoctorModalOrder.odAdd = add;
+        this.state.activeDoctorModalOrder.rxRight = composed;
+      }
+    };
+
+    const recomposeRxLeft = () => {
+      const sphere = this.container.querySelector('#modal-input-sphere-l')?.value || '';
+      const bc = this.container.querySelector('#modal-input-bc-l')?.value || '';
+      const dia = this.container.querySelector('#modal-input-dia-l')?.value || '';
+      const cyl = this.container.querySelector('#modal-input-cyl-l')?.value || '';
+      const axis = this.container.querySelector('#modal-input-axis-l')?.value || '';
+      const add = this.container.querySelector('#modal-input-add-l')?.value || '';
+      const type = this.state.activeDoctorModalOrder?.lensType || 'spherical';
+      const composed = this.composeRx(sphere, cyl, axis, add, bc, dia, type);
+      const rxLInp = this.container.querySelector('#modal-input-rx-l');
+      if (rxLInp) rxLInp.value = composed;
+      if (this.state.activeDoctorModalOrder) {
+        this.state.activeDoctorModalOrder.osSphere = sphere;
+        this.state.activeDoctorModalOrder.osBc = bc;
+        this.state.activeDoctorModalOrder.osDia = dia;
+        this.state.activeDoctorModalOrder.osCyl = cyl;
+        this.state.activeDoctorModalOrder.osAxis = axis;
+        this.state.activeDoctorModalOrder.osAdd = add;
+        this.state.activeDoctorModalOrder.rxLeft = composed;
+      }
+    };
+
+    lensTypeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.getAttribute('data-lens-type');
+        if (this.state.activeDoctorModalOrder) {
+          this.state.activeDoctorModalOrder.lensType = type;
+        }
+        lensTypeBtns.forEach(b => b.classList.toggle('active-type-btn', b === btn));
+        const toricOD = this.container.querySelector('#rx-toric-block-r');
+        const toricOS = this.container.querySelector('#rx-toric-block-l');
+        const multiOD = this.container.querySelector('#rx-multi-block-r');
+        const multiOS = this.container.querySelector('#rx-multi-block-l');
+        const showToric = (type === 'toric' || type === 'toric_multifocal');
+        const showMulti = (type === 'multifocal' || type === 'toric_multifocal');
+        if (toricOD) toricOD.style.display = showToric ? 'block' : 'none';
+        if (toricOS) toricOS.style.display = showToric ? 'block' : 'none';
+        if (multiOD) multiOD.style.display = showMulti ? 'block' : 'none';
+        if (multiOS) multiOS.style.display = showMulti ? 'block' : 'none';
+        recomposeRxRight();
+        recomposeRxLeft();
+      });
+    });
+
+    const rxParamInputs = this.container.querySelectorAll('.rx-param-input');
+    rxParamInputs.forEach(inp => {
+      inp.addEventListener('input', () => {
+        if (inp.id.endsWith('-r')) recomposeRxRight();
+        else if (inp.id.endsWith('-l')) recomposeRxLeft();
+      });
+    });
+
     const copyRxLeftBtn = this.container.querySelector('.btn-copy-rx-left');
 
     if (copyRxLeftBtn) {
 
       copyRxLeftBtn.addEventListener('click', () => {
 
+        const sphereR = this.container.querySelector('#modal-input-sphere-r')?.value || '';
+        const bcR = this.container.querySelector('#modal-input-bc-r')?.value || '';
+        const diaR = this.container.querySelector('#modal-input-dia-r')?.value || '';
+        const cylR = this.container.querySelector('#modal-input-cyl-r')?.value || '';
+        const axisR = this.container.querySelector('#modal-input-axis-r')?.value || '';
+        const addR = this.container.querySelector('#modal-input-add-r')?.value || '';
         const rxR = this.container.querySelector('#modal-input-rx-r')?.value || '';
-
         const qtyR = this.container.querySelector('#modal-input-qty-r')?.value || '1';
 
+        const sphereL = this.container.querySelector('#modal-input-sphere-l');
+        const bcL = this.container.querySelector('#modal-input-bc-l');
+        const diaL = this.container.querySelector('#modal-input-dia-l');
+        const cylL = this.container.querySelector('#modal-input-cyl-l');
+        const axisL = this.container.querySelector('#modal-input-axis-l');
+        const addL = this.container.querySelector('#modal-input-add-l');
         const rxL = this.container.querySelector('#modal-input-rx-l');
-
         const qtyL = this.container.querySelector('#modal-input-qty-l');
 
+        if (sphereL) sphereL.value = sphereR;
+        if (bcL) bcL.value = bcR;
+        if (diaL) diaL.value = diaR;
+        if (cylL) cylL.value = cylR;
+        if (axisL) axisL.value = axisR;
+        if (addL) addL.value = addR;
         if (rxL) rxL.value = rxR;
-
         if (qtyL) qtyL.value = qtyR;
 
         if (this.state.activeDoctorModalOrder) {
 
+          this.state.activeDoctorModalOrder.osSphere = sphereR;
+          this.state.activeDoctorModalOrder.osBc = bcR;
+          this.state.activeDoctorModalOrder.osDia = diaR;
+          this.state.activeDoctorModalOrder.osCyl = cylR;
+          this.state.activeDoctorModalOrder.osAxis = axisR;
+          this.state.activeDoctorModalOrder.osAdd = addR;
           this.state.activeDoctorModalOrder.rxLeft = rxR;
-
           this.state.activeDoctorModalOrder.qtyLeft = qtyR;
 
         }
@@ -4086,6 +4726,70 @@ export class ContactLensOrderForm {
       });
 
     }
+
+    // Payment & Insurance Selection in Doctor Modal
+    const updateInsurancePdValue = () => {
+      const carrierInp = this.container.querySelector('#modal-input-ins-carrier');
+      const carrier = (carrierInp?.value || '').trim();
+      const activeCovBtn = this.container.querySelector('.chip-ins-coverage.active-coverage-btn');
+      const cov = activeCovBtn?.getAttribute('data-coverage') || 'full';
+      const pdInp = this.container.querySelector('#modal-input-pd');
+      const covLabel = cov === 'partial' ? 'Partial' : 'Full';
+      if (pdInp) {
+        pdInp.value = carrier ? `Ins: ${carrier} (${covLabel})` : `Insurance (${covLabel})`;
+      }
+      if (this.state.activeDoctorModalOrder) {
+        this.state.activeDoctorModalOrder.insuranceCarrier = carrier;
+        this.state.activeDoctorModalOrder.insuranceCoverage = cov;
+        this.state.activeDoctorModalOrder.paid = pdInp?.value || '';
+      }
+    };
+
+    const payTypeBtns = this.container.querySelectorAll('.btn-pay-type');
+    const insPanel = this.container.querySelector('#modal-insurance-panel');
+    payTypeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.getAttribute('data-pay-type');
+        payTypeBtns.forEach(b => b.classList.toggle('active-pay-btn', b === btn));
+        const pdInp = this.container.querySelector('#modal-input-pd');
+        if (type === 'unpaid') {
+          if (insPanel) insPanel.style.display = 'none';
+          if (pdInp) pdInp.value = '-';
+          if (this.state.activeDoctorModalOrder) this.state.activeDoctorModalOrder.paid = '-';
+        } else if (type === 'paid') {
+          if (insPanel) insPanel.style.display = 'none';
+          if (pdInp) pdInp.value = 'Yes';
+          if (this.state.activeDoctorModalOrder) this.state.activeDoctorModalOrder.paid = 'Yes';
+        } else if (type === 'insurance') {
+          if (insPanel) insPanel.style.display = 'block';
+          const carrierInp = this.container.querySelector('#modal-input-ins-carrier');
+          if (carrierInp) carrierInp.focus();
+          updateInsurancePdValue();
+        }
+      });
+    });
+
+    const insCarrierInp = this.container.querySelector('#modal-input-ins-carrier');
+    if (insCarrierInp) {
+      insCarrierInp.addEventListener('input', () => updateInsurancePdValue());
+    }
+
+    const insCarrierChips = this.container.querySelectorAll('.chip-ins-carrier');
+    insCarrierChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const carrier = chip.getAttribute('data-carrier');
+        if (insCarrierInp) insCarrierInp.value = carrier;
+        updateInsurancePdValue();
+      });
+    });
+
+    const insCoverageChips = this.container.querySelectorAll('.chip-ins-coverage');
+    insCoverageChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        insCoverageChips.forEach(c => c.classList.toggle('active-coverage-btn', c === chip));
+        updateInsurancePdValue();
+      });
+    });
 
     const submitDocModal = this.container.querySelector('#btn-submit-doctor-order');
 

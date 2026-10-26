@@ -558,24 +558,30 @@ html, body {
   border-color: #ef4444;
 }
 
-/* Sticky Headers for comfortable 50-row scrolling */
+/* 50-Row Waiting Sheet & Order Table Clear Visibility */
 .cl-pickup-sheet-table th {
-  position: sticky;
-  top: 58px;
-  z-index: 40;
+  position: static !important;
+  z-index: 1;
   background: #f8fafc !important;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+  box-shadow: none !important;
 }
 
 .clo-table th {
-  position: sticky;
-  top: 58px;
-  z-index: 40;
+  position: static !important;
+  z-index: 1;
   background: #f8fafc !important;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+  box-shadow: none !important;
 }
 
-.clo-pickup-sheet-wrapper,
+.clo-pickup-sheet-wrapper {
+  margin-top: 24px !important;
+  padding-top: 10px !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  padding-bottom: 50px !important;
+  width: 100% !important;
+}
+
 .clo-sheet-canvas-wrapper {
   overflow-x: auto !important;
   overflow-y: visible !important;
@@ -585,6 +591,42 @@ html, body {
 
 .clo-pickup-sheet-canvas {
   min-width: 1250px !important;
+  position: relative !important;
+  z-index: 1;
+}
+
+.cl-pickup-sheet-table {
+  position: relative;
+  z-index: 1;
+}
+
+.cl-pickup-row:first-child td {
+  padding-top: 6px !important;
+}
+
+/* Doctor Modal Rx & Payment Interactive Chips */
+.active-type-btn {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #0284c7 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3) !important;
+}
+
+.active-pay-btn {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.3) !important;
+}
+
+.active-coverage-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3) !important;
 }
 
 .clo-sheet-canvas {

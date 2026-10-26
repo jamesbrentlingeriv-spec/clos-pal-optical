@@ -1,5 +1,5 @@
-// C.L.O.S. PWA Service Worker (v3)
-const CACHE_NAME = 'clos-pwa-v4';
+// C.L.O.S. PWA Service Worker (v5)
+const CACHE_NAME = 'clos-pwa-v5';
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
